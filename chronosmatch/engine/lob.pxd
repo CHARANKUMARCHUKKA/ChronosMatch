@@ -31,3 +31,5 @@ cdef struct PriceLevel:
     uint64_t price
     OrderNode* head
     OrderNode* tail
+
+# LOB Price Level node definitions and memory layout (v2.1)
