@@ -76,3 +76,5 @@ def get_ring_buffer(tagname: str, struct_type, capacity: int, create: bool = Fal
 # [Test] Buffer capacity strictly checked
 
 # [Warning] Readers must not mutate the execution array
+
+# [IPC] Verified memory barriers for zero-copy ring buffer synchronization
