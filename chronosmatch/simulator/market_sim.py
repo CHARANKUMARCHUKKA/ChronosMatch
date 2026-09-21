@@ -101,3 +101,5 @@ if __name__ == "__main__":
 # [Sim] Spread tightly bound to 0.05 ticks
 
 # [Sim] Verified tick distribution for candlestick wicks
+
+# [Sim] Calibrated volatility parameters for realistic micro-structure price drift
