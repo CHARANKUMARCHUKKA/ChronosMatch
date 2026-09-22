@@ -88,3 +88,17 @@ cdef class Matcher:
                         level_idx = i
                 
                 if self.asks[level_idx].price > order.price:
+                    break # Best ask is too expensive
+                
+                # We have a match!
+                curr = self.asks[level_idx].head
+                while curr != NULL and order.size > 0:
+                    match_size = order.size if order.size < curr.order.size else curr.order.size
+                    match_price = self.asks[level_idx].price
+                    
+                    order.size -= match_size
+                    curr.order.size -= match_size
+                    
+                    # Generate executions for both sides
+                    self.add_execution(out_buf, out_hdr, curr.order.order_id, match_price, match_size, curr.order.timestamp, get_time_ns())
+                    self.add_execution(out_buf, out_hdr, order.order_id, match_price, match_size, order.timestamp, get_time_ns())
