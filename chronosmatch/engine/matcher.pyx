@@ -102,3 +102,17 @@ cdef class Matcher:
                     # Generate executions for both sides
                     self.add_execution(out_buf, out_hdr, curr.order.order_id, match_price, match_size, curr.order.timestamp, get_time_ns())
                     self.add_execution(out_buf, out_hdr, order.order_id, match_price, match_size, order.timestamp, get_time_ns())
+                    
+                    if curr.order.size == 0:
+                        # Remove node
+                        self.asks[level_idx].head = curr.next
+                        curr = curr.next
+                    else:
+                        break
+                        
+                if self.asks[level_idx].head == NULL:
+                    # Remove price level
+                    self.num_asks -= 1
+                    self.asks[level_idx] = self.asks[self.num_asks]
+                    
+            # If still size left, add to bids
