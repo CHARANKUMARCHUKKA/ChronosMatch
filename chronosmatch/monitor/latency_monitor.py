@@ -24,3 +24,17 @@ def monitor_app(stdscr, duration=15):
     total_executions = 0
     start_time = time.time()
     
+    last_ui_update = 0
+    
+    while time.time() - start_time < duration:
+        tail = header.tail
+        
+        while head < tail:
+            idx = head % cap
+            exec_record = data_array[idx]
+            
+            # calculate latency in microseconds
+            latency_ns = exec_record.ts_out - exec_record.ts_in
+            latency_us = latency_ns / 1000.0
+            
+            if latency_us > 0: # filter anomalies
