@@ -52,3 +52,17 @@ def monitor_app(stdscr, duration=15):
             if len(latencies) > 10000:
                 latencies = latencies[-10000:]
                 
+            if len(latencies) > 0:
+                avg_lat = sum(latencies) / len(latencies)
+                max_lat = max(latencies)
+                min_lat = min(latencies)
+                
+                latencies_sorted = sorted(latencies)
+                p99 = latencies_sorted[int(len(latencies) * 0.99)] if len(latencies) > 100 else 0
+                
+                stdscr.clear()
+                stdscr.addstr(0, 0, "=== ChronosMatch Zero-Copy HFT Dashboard ===", curses.A_BOLD | curses.A_REVERSE)
+                stdscr.addstr(2, 0, f"Total Executions: {total_executions:,}")
+                stdscr.addstr(4, 0, f"Latency Metrics (last {len(latencies)} execs):")
+                stdscr.addstr(5, 2, f"Min Latency : {min_lat:8.2f} µs")
+                stdscr.addstr(6, 2, f"Avg Latency : {avg_lat:8.2f} µs")
