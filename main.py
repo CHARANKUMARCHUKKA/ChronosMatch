@@ -53,3 +53,4 @@ if __name__ == '__main__':
     engine_process.terminate()
     engine_process.join()
     
+    print("ChronosMatch finished successfully.")
