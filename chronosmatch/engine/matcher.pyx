@@ -130,3 +130,17 @@ cdef class Matcher:
                     self.bids[level_idx].tail = NULL
                 
                 curr = self.alloc_node(order)
+                if curr != NULL:
+                    if self.bids[level_idx].head == NULL:
+                        self.bids[level_idx].head = curr
+                        self.bids[level_idx].tail = curr
+                    else:
+                        self.bids[level_idx].tail.next = curr
+                        self.bids[level_idx].tail = curr
+
+        else: # SELL
+            # Match against Bids (highest to lowest)
+            while order.size > 0 and self.num_bids > 0:
+                # Find max bid
+                level_idx = 0
+                for i in range(1, self.num_bids):
