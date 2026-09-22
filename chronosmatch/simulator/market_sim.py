@@ -36,3 +36,17 @@ async def simulate_firehose(tagname="ChronosMatchInbound", capacity=65536, durat
             
         for _ in range(batch_size):
             idx = tail % capacity
+            order = data_array[idx]
+            order.order_id = order_id
+            order.price = prices[idx_rnd]
+            order.size = sizes[idx_rnd]
+            order.side = sides[idx_rnd]
+            order.timestamp = time.perf_counter_ns()
+            
+            tail += 1
+            order_id += 1
+            idx_rnd = (idx_rnd + 1) % 1000
+            
+        header.tail = tail
+        
+        # Simulate websocket network yield
