@@ -25,3 +25,17 @@ class Execution(ctypes.Structure):
         ("ts_in", ctypes.c_uint64),
         ("ts_out", ctypes.c_uint64),
     ] # Total: 48 bytes
+
+class RingBufferHeader(ctypes.Structure):
+    _pack_ = 1
+    _fields_ = [
+        ("head", ctypes.c_uint64),
+        ("tail", ctypes.c_uint64),
+        ("capacity", ctypes.c_uint64),
+    ] # Total: 24 bytes
+
+def get_ring_buffer(tagname: str, struct_type, capacity: int, create: bool = False):
+    """
+    Creates or attaches to a named shared memory ring buffer.
+    """
+    header_size = ctypes.sizeof(RingBufferHeader)
