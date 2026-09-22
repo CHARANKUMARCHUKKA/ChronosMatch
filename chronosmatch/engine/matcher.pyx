@@ -172,3 +172,17 @@ cdef class Matcher:
                     self.num_bids -= 1
                     self.bids[level_idx] = self.bids[self.num_bids]
                     
+            if order.size > 0:
+                level_idx = -1
+                for i in range(self.num_asks):
+                    if self.asks[i].price == order.price:
+                        level_idx = i
+                        break
+                if level_idx == -1:
+                    level_idx = self.num_asks
+                    self.num_asks += 1
+                    self.asks[level_idx].price = order.price
+                    self.asks[level_idx].head = NULL
+                    self.asks[level_idx].tail = NULL
+                    
+                curr = self.alloc_node(order)
