@@ -46,3 +46,17 @@ cdef class Matcher:
         if self.asks != NULL:
             free(self.asks)
 
+    cdef OrderNode* alloc_node(self, Order* order):
+        if self.pool_index >= self.pool_capacity:
+            return NULL # Out of memory in pool
+        cdef OrderNode* node = &self.order_pool[self.pool_index]
+        self.pool_index += 1
+        node.order = order[0]
+        node.next = NULL
+        return node
+
+    cdef void add_execution(self, Execution* out_buf, RingBufferHeader* out_hdr, uint64_t order_id, uint64_t price, uint32_t size, uint64_t ts_in, uint64_t ts_out):
+        cdef uint64_t tail = out_hdr.tail
+        cdef uint64_t cap = out_hdr.capacity
+        cdef uint64_t idx = tail % cap
+        
