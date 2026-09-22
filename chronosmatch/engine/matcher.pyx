@@ -74,3 +74,17 @@ cdef class Matcher:
         cdef uint32_t match_size = 0
         cdef uint64_t match_price = 0
         cdef OrderNode* curr
+        cdef OrderNode* prev
+        cdef int level_idx
+        cdef int i, j
+        
+        if order.side == 0: # BUY
+            # Match against Asks (lowest to highest)
+            while order.size > 0 and self.num_asks > 0:
+                # Find min ask
+                level_idx = 0
+                for i in range(1, self.num_asks):
+                    if self.asks[i].price < self.asks[level_idx].price:
+                        level_idx = i
+                
+                if self.asks[level_idx].price > order.price:
