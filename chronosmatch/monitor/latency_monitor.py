@@ -80,3 +80,8 @@ def monitor_app(stdscr, duration=15):
 def run_monitor():
     try:
         curses.wrapper(monitor_app)
+    except Exception as e:
+        print(f"Monitor exited: {e}")
+
+if __name__ == "__main__":
+    run_monitor()
