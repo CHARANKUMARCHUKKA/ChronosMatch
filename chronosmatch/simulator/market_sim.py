@@ -22,3 +22,17 @@ async def simulate_firehose(tagname="ChronosMatchInbound", capacity=65536, durat
     prices = [mid_price + random.randint(-5, 5) for _ in range(1000)]
     sizes = [random.randint(1, 50) for _ in range(1000)]
     
+    idx_rnd = 0
+    batch_size = 50 # batch inserts to achieve higher throughput
+
+    while time.time() - start_time < duration:
+        tail = header.tail
+        head = header.head
+        
+        # Check space
+        if tail + batch_size - head >= capacity:
+            await asyncio.sleep(0.001)
+            continue
+            
+        for _ in range(batch_size):
+            idx = tail % capacity
