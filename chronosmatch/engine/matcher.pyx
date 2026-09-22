@@ -158,3 +158,17 @@ cdef class Matcher:
                     
                     order.size -= match_size
                     curr.order.size -= match_size
+                    
+                    self.add_execution(out_buf, out_hdr, curr.order.order_id, match_price, match_size, curr.order.timestamp, get_time_ns())
+                    self.add_execution(out_buf, out_hdr, order.order_id, match_price, match_size, order.timestamp, get_time_ns())
+                    
+                    if curr.order.size == 0:
+                        self.bids[level_idx].head = curr.next
+                        curr = curr.next
+                    else:
+                        break
+                
+                if self.bids[level_idx].head == NULL:
+                    self.num_bids -= 1
+                    self.bids[level_idx] = self.bids[self.num_bids]
+                    
