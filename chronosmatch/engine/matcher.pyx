@@ -144,3 +144,17 @@ cdef class Matcher:
                 # Find max bid
                 level_idx = 0
                 for i in range(1, self.num_bids):
+                    if self.bids[i].price > self.bids[level_idx].price:
+                        level_idx = i
+                        
+                if self.bids[level_idx].price < order.price:
+                    break # Best bid is too cheap
+                    
+                # We have a match!
+                curr = self.bids[level_idx].head
+                while curr != NULL and order.size > 0:
+                    match_size = order.size if order.size < curr.order.size else curr.order.size
+                    match_price = self.bids[level_idx].price
+                    
+                    order.size -= match_size
+                    curr.order.size -= match_size
