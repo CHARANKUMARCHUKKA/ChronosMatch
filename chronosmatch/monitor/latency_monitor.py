@@ -66,3 +66,17 @@ def monitor_app(stdscr, duration=15):
                 stdscr.addstr(4, 0, f"Latency Metrics (last {len(latencies)} execs):")
                 stdscr.addstr(5, 2, f"Min Latency : {min_lat:8.2f} µs")
                 stdscr.addstr(6, 2, f"Avg Latency : {avg_lat:8.2f} µs")
+                stdscr.addstr(7, 2, f"P99 Latency : {p99:8.2f} µs")
+                stdscr.addstr(8, 2, f"Max Latency : {max_lat:8.2f} µs")
+                
+                # Draw a simple bar chart
+                bar_len = min(50, int(avg_lat / 2))
+                stdscr.addstr(10, 0, "Avg Latency |" + "#" * bar_len)
+                
+                stdscr.refresh()
+            
+        time.sleep(0.001)
+
+def run_monitor():
+    try:
+        curses.wrapper(monitor_app)
