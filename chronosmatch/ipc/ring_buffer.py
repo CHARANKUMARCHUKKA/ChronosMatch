@@ -39,3 +39,17 @@ def get_ring_buffer(tagname: str, struct_type, capacity: int, create: bool = Fal
     Creates or attaches to a named shared memory ring buffer.
     """
     header_size = ctypes.sizeof(RingBufferHeader)
+    item_size = ctypes.sizeof(struct_type)
+    total_size = header_size + (item_size * capacity)
+    
+    # On Windows, mmap with fileno=-1 and a tagname creates/opens named shared memory
+    mm = mmap.mmap(-1, total_size, tagname=tagname)
+    
+    header = RingBufferHeader.from_buffer(mm, 0)
+    
+    if create:
+        header.head = 0
+        header.tail = 0
+        header.capacity = capacity
+        
+    array_type = struct_type * capacity
