@@ -50,3 +50,17 @@ async def simulate_firehose(tagname="ChronosMatchInbound", capacity=65536, durat
         header.tail = tail
         
         # Simulate websocket network yield
+        if sleep_time * batch_size > 0.001:
+            await asyncio.sleep(sleep_time * batch_size)
+        else:
+            await asyncio.sleep(0) # yield control
+
+    # Send STOP signal
+    tail = header.tail
+    idx = tail % capacity
+    order = data_array[idx]
+    order.order_id = 0
+    header.tail = tail + 1
+
+    print(f"Simulator finished. Pushed {order_id-1} orders.")
+
