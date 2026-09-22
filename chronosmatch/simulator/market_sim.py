@@ -64,3 +64,5 @@ async def simulate_firehose(tagname="ChronosMatchInbound", capacity=65536, durat
 
     print(f"Simulator finished. Pushed {order_id-1} orders.")
 
+if __name__ == "__main__":
+    asyncio.run(simulate_firehose())
