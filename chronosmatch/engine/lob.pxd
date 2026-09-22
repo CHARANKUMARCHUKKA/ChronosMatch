@@ -23,3 +23,11 @@ cdef packed struct RingBufferHeader:
     uint64_t capacity
 
 # Nodes for the Limit Order Book linked lists
+cdef struct OrderNode:
+    Order order
+    OrderNode* next
+
+cdef struct PriceLevel:
+    uint64_t price
+    OrderNode* head
+    OrderNode* tail
