@@ -25,3 +25,17 @@ def run_engine():
     out_buf_addr = ctypes.addressof(out_data)
     out_hdr_addr = ctypes.addressof(out_hdr)
     
+    matcher = Matcher(max_orders=1000000, max_levels=10000)
+    matcher.run(in_buf_addr, in_hdr_addr, out_buf_addr, out_hdr_addr)
+
+def run_simulator():
+    import asyncio
+    asyncio.run(simulate_firehose(duration=15, orders_per_sec=20000))
+
+if __name__ == '__main__':
+    # Fix for Windows multiprocessing
+    multiprocessing.freeze_support()
+    
+    print("Starting ChronosMatch Zero-Copy HFT Engine...")
+    
+    engine_process = multiprocessing.Process(target=run_engine)
