@@ -60,3 +60,17 @@ cdef class Matcher:
         cdef uint64_t cap = out_hdr.capacity
         cdef uint64_t idx = tail % cap
         
+        self.execution_counter += 1
+        out_buf[idx].exec_id = self.execution_counter
+        out_buf[idx].order_id = order_id
+        out_buf[idx].price = price
+        out_buf[idx].size = size
+        out_buf[idx].ts_in = ts_in
+        out_buf[idx].ts_out = ts_out
+        
+        out_hdr.tail = tail + 1
+
+    cdef void process_order(self, Order* order, Execution* out_buf, RingBufferHeader* out_hdr):
+        cdef uint32_t match_size = 0
+        cdef uint64_t match_price = 0
+        cdef OrderNode* curr
