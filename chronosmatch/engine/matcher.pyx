@@ -18,3 +18,17 @@ cdef class Matcher:
     cdef uint32_t pool_capacity
     cdef uint32_t pool_index
     
+    # Simple arrays for price levels
+    cdef PriceLevel* bids
+    cdef uint32_t num_bids
+    
+    cdef PriceLevel* asks
+    cdef uint32_t num_asks
+    
+    cdef uint64_t execution_counter
+
+    def __cinit__(self, uint32_t max_orders=1000000, uint32_t max_levels=10000):
+        self.pool_capacity = max_orders
+        self.order_pool = <OrderNode*>malloc(sizeof(OrderNode) * max_orders)
+        self.pool_index = 0
+        
