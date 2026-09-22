@@ -39,3 +39,17 @@ if __name__ == '__main__':
     print("Starting ChronosMatch Zero-Copy HFT Engine...")
     
     engine_process = multiprocessing.Process(target=run_engine)
+    sim_process = multiprocessing.Process(target=run_simulator)
+    monitor_process = multiprocessing.Process(target=run_monitor)
+    
+    engine_process.start()
+    time.sleep(1) # Give engine time to setup memory map
+    
+    monitor_process.start()
+    sim_process.start()
+    
+    sim_process.join()
+    monitor_process.join()
+    engine_process.terminate()
+    engine_process.join()
+    
