@@ -186,3 +186,17 @@ cdef class Matcher:
                     self.asks[level_idx].tail = NULL
                     
                 curr = self.alloc_node(order)
+                if curr != NULL:
+                    if self.asks[level_idx].head == NULL:
+                        self.asks[level_idx].head = curr
+                        self.asks[level_idx].tail = curr
+                    else:
+                        self.asks[level_idx].tail.next = curr
+                        self.asks[level_idx].tail = curr
+
+    def run(self, size_t in_buf_addr, size_t in_hdr_addr, size_t out_buf_addr, size_t out_hdr_addr):
+        cdef Order* in_buf = <Order*>in_buf_addr
+        cdef RingBufferHeader* in_hdr = <RingBufferHeader*>in_hdr_addr
+        cdef Execution* out_buf = <Execution*>out_buf_addr
+        cdef RingBufferHeader* out_hdr = <RingBufferHeader*>out_hdr_addr
+        
