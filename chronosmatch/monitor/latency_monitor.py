@@ -38,3 +38,17 @@ def monitor_app(stdscr, duration=15):
             latency_us = latency_ns / 1000.0
             
             if latency_us > 0: # filter anomalies
+                latencies.append(latency_us)
+            total_executions += 1
+            
+            head += 1
+            
+        header.head = head
+        
+        # UI Update every 100ms
+        now = time.time()
+        if now - last_ui_update > 0.1:
+            last_ui_update = now
+            if len(latencies) > 10000:
+                latencies = latencies[-10000:]
+                
