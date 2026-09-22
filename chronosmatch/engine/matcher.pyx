@@ -200,3 +200,17 @@ cdef class Matcher:
         cdef Execution* out_buf = <Execution*>out_buf_addr
         cdef RingBufferHeader* out_hdr = <RingBufferHeader*>out_hdr_addr
         
+        cdef uint64_t head = in_hdr.head
+        cdef uint64_t cap = in_hdr.capacity
+        cdef Order* order
+        
+        print("Cython Matcher engine started. Polling ring buffer...")
+        
+        while True:
+            if in_hdr.tail > head:
+                order = &in_buf[head % cap]
+                # Special exit condition: order_id == 0 means STOP
+                if order.order_id == 0:
+                    print("Received STOP signal.")
+                    break
+                self.process_order(order, out_buf, out_hdr)
