@@ -116,3 +116,17 @@ cdef class Matcher:
                     self.asks[level_idx] = self.asks[self.num_asks]
                     
             # If still size left, add to bids
+            if order.size > 0:
+                level_idx = -1
+                for i in range(self.num_bids):
+                    if self.bids[i].price == order.price:
+                        level_idx = i
+                        break
+                if level_idx == -1:
+                    level_idx = self.num_bids
+                    self.num_bids += 1
+                    self.bids[level_idx].price = order.price
+                    self.bids[level_idx].head = NULL
+                    self.bids[level_idx].tail = NULL
+                
+                curr = self.alloc_node(order)
