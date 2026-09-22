@@ -32,3 +32,17 @@ cdef class Matcher:
         self.order_pool = <OrderNode*>malloc(sizeof(OrderNode) * max_orders)
         self.pool_index = 0
         
+        self.bids = <PriceLevel*>malloc(sizeof(PriceLevel) * max_levels)
+        self.asks = <PriceLevel*>malloc(sizeof(PriceLevel) * max_levels)
+        self.num_bids = 0
+        self.num_asks = 0
+        self.execution_counter = 0
+
+    def __dealloc__(self):
+        if self.order_pool != NULL:
+            free(self.order_pool)
+        if self.bids != NULL:
+            free(self.bids)
+        if self.asks != NULL:
+            free(self.asks)
+
