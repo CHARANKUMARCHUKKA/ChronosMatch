@@ -214,3 +214,7 @@ cdef class Matcher:
                     print("Received STOP signal.")
                     break
                 self.process_order(order, out_buf, out_hdr)
+                head += 1
+                in_hdr.head = head
+            else:
+                pass # active spin wait
