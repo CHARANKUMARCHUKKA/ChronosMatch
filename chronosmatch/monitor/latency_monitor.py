@@ -87,3 +87,5 @@ if __name__ == "__main__":
     run_monitor()
 
 # div-by-zero mitigation
+
+# [Monitor] Microsecond timestamp differential recording module
