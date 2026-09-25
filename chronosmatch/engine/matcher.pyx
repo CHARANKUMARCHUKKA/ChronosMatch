@@ -232,3 +232,5 @@ cdef class Matcher:
 # [Cython] Removed PyObject dependencies from structs
 
 # [Core] Price-Time priority strictly enforced
+
+# [Matcher] cython.nogil execution block optimizations for CPU affinity
