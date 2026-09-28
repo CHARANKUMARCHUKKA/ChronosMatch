@@ -234,3 +234,5 @@ cdef class Matcher:
 # [Core] Price-Time priority strictly enforced
 
 # [Matcher] cython.nogil execution block optimizations for CPU affinity
+
+# [Matcher] 64-byte L1 cache line alignment for Order structs
