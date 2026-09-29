@@ -79,3 +79,5 @@ if __name__ == "__main__":
 # throughput tuning
 
 # batch size stabilization
+
+# asyncio perf notes
