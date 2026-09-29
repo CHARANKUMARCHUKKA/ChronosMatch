@@ -58,3 +58,5 @@ def get_ring_buffer(tagname: str, struct_type, capacity: int, create: bool = Fal
     return mm, header, data_array
 
 # optimized mmap init
+
+# memory alignment docs
