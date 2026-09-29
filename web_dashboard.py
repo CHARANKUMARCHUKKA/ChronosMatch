@@ -251,3 +251,5 @@ if st.session_state.monitoring:
 # lookback defaults
 
 # plotly df optimization
+
+# whale filter tooltip
