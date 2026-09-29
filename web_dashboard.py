@@ -257,3 +257,5 @@ if st.session_state.monitoring:
 # sidebar layout tweak
 
 # memory footprint reduction
+
+# contrast adjustments
