@@ -253,3 +253,5 @@ if st.session_state.monitoring:
 # plotly df optimization
 
 # whale filter tooltip
+
+# sidebar layout tweak
