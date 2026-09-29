@@ -56,3 +56,5 @@ def get_ring_buffer(tagname: str, struct_type, capacity: int, create: bool = Fal
     data_array = array_type.from_buffer(mm, header_size)
     
     return mm, header, data_array
+
+# optimized mmap init
