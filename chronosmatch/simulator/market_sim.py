@@ -73,3 +73,5 @@ if __name__ == "__main__":
     asyncio.run(simulate_firehose())
 
 # GBM logic documented
+
+# price boundary check
