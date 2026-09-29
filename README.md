@@ -58,3 +58,5 @@ python main.py
 This will automatically spawn the multi-process architecture. Your terminal will clear and present the **ChronosMatch Latency Dashboard**. The simulator will begin pumping thousands of orders into the memory buffer, and the C-engine will match them in real-time. 
 
 Use `Ctrl + C` to exit the dashboard.
+
+<!-- performance notes added -->
