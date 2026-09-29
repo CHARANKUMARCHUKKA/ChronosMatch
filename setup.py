@@ -15,3 +15,5 @@ setup(
 )
 
 # formatted cython imports
+
+# cython reqs clarified
