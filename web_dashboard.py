@@ -249,3 +249,5 @@ if st.session_state.monitoring:
 # execution parsing abstraction
 
 # lookback defaults
+
+# plotly df optimization
