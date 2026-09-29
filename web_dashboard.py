@@ -255,3 +255,5 @@ if st.session_state.monitoring:
 # whale filter tooltip
 
 # sidebar layout tweak
+
+# memory footprint reduction
