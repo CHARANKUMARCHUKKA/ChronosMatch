@@ -243,3 +243,5 @@ if st.session_state.monitoring:
         st.rerun()
 
 # cleanup UI vars
+
+# css metric alignment
