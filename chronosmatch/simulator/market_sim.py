@@ -13,17 +13,10 @@ async def simulate_firehose(tagname="ChronosMatchInbound", capacity=65536, durat
     
     start_time = time.time()
     order_id = 1
-    mid_price = 10000 # e.g., $100.00
+    current_price = 15050 # Start at $150.50
     
     sleep_time = 1.0 / orders_per_sec
-    
-    # Pre-generate some randomness to avoid random.randint overhead in the hot loop
-    sides = [random.choice([0, 1]) for _ in range(1000)]
-    prices = [mid_price + random.randint(-5, 5) for _ in range(1000)]
-    sizes = [random.randint(1, 50) for _ in range(1000)]
-    
-    idx_rnd = 0
-    batch_size = 50 # batch inserts to achieve higher throughput
+    batch_size = 50 
 
     while time.time() - start_time < duration:
         tail = header.tail
@@ -35,25 +28,37 @@ async def simulate_firehose(tagname="ChronosMatchInbound", capacity=65536, durat
             continue
             
         for _ in range(batch_size):
+            # 1. Realistic Price Action (Random Walk / Brownian Motion)
+            # Simulates tick-by-tick micro-movements
+            tick_change = random.choices([-3, -2, -1, 0, 1, 2, 3], weights=[0.05, 0.15, 0.25, 0.10, 0.25, 0.15, 0.05])[0]
+            current_price += tick_change
+            if current_price < 100: current_price = 100
+            
+            # 2. Realistic Trade Sizes (Exponential Distribution)
+            # Many small retail trades, rare massive institutional blocks
+            size = int(random.expovariate(1.0 / 60.0)) + 1
+            
+            # 3. Side (Buy/Sell)
+            side = random.choice([0, 1])
+            
             idx = tail % capacity
             order = data_array[idx]
             order.order_id = order_id
-            order.price = prices[idx_rnd]
-            order.size = sizes[idx_rnd]
-            order.side = sides[idx_rnd]
+            order.price = current_price
+            order.size = size
+            order.side = side
             order.timestamp = time.perf_counter_ns()
             
             tail += 1
             order_id += 1
-            idx_rnd = (idx_rnd + 1) % 1000
             
         header.tail = tail
         
-        # Simulate websocket network yield
+        # Simulate network yield
         if sleep_time * batch_size > 0.001:
             await asyncio.sleep(sleep_time * batch_size)
         else:
-            await asyncio.sleep(0) # yield control
+            await asyncio.sleep(0)
 
     # Send STOP signal
     tail = header.tail

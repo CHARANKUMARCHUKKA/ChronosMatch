@@ -30,7 +30,7 @@ def run_engine():
 
 def run_simulator():
     import asyncio
-    asyncio.run(simulate_firehose(duration=15, orders_per_sec=20000))
+    asyncio.run(simulate_firehose(duration=36000, orders_per_sec=20000))
 
 if __name__ == '__main__':
     # Fix for Windows multiprocessing
