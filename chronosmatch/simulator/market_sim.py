@@ -71,3 +71,5 @@ async def simulate_firehose(tagname="ChronosMatchInbound", capacity=65536, durat
 
 if __name__ == "__main__":
     asyncio.run(simulate_firehose())
+
+# GBM logic documented
