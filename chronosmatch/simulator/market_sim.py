@@ -77,3 +77,5 @@ if __name__ == "__main__":
 # price boundary check
 
 # throughput tuning
+
+# batch size stabilization
