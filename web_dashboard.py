@@ -241,3 +241,5 @@ if st.session_state.monitoring:
             
         time.sleep(refresh_rate)
         st.rerun()
+
+# cleanup UI vars
