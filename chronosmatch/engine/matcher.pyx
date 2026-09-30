@@ -222,3 +222,5 @@ cdef class Matcher:
 # [Docs] Match loop operates without GIL for microsecond latency
 
 # [Core] C-Struct memory alignment verified
+
+# [Cython] cdef variables explicitly typed for speed
