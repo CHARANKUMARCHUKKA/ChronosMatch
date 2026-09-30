@@ -348,3 +348,5 @@ render_live_feed()
 # [UI] RSI 70/30 boundary lines annotated
 
 # [UI] DOM bars scale linearly with volume
+
+# [Bugfix] Empty dataframe initialization fallback
