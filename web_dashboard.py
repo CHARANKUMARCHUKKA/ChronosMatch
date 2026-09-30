@@ -344,3 +344,5 @@ render_live_feed()
 # [UI] Enhanced hex contrast for metric labels
 
 # [Bugfix] Stripped trailing newline in bash output
+
+# [UI] RSI 70/30 boundary lines annotated
