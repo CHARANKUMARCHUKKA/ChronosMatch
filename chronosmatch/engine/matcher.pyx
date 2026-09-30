@@ -218,3 +218,5 @@ cdef class Matcher:
                 in_hdr.head = head
             else:
                 pass # active spin wait
+
+# [Docs] Match loop operates without GIL for microsecond latency
