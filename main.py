@@ -70,3 +70,5 @@ if __name__ == '__main__':
 # [Opt] Added micro-sleep to idle spin lock
 
 # [Config] Duration hardcoded for infinite run
+
+# [Core] Used spawn method for Windows compatibility
