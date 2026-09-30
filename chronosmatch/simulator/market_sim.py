@@ -87,3 +87,5 @@ if __name__ == "__main__":
 # [Sim] Adjusted scale parameter for whale trade simulation
 
 # [Sim] Verified bid/ask spread generation logic
+
+# [Sim] Adjusted GBM drift for mean-reversion
