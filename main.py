@@ -74,3 +74,5 @@ if __name__ == '__main__':
 # [Core] Used spawn method for Windows compatibility
 
 # [Docs] Command: python main.py to boot engine
+
+# [Chore] Flake8/Black linting applied
