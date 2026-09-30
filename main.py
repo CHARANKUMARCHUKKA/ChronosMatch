@@ -60,3 +60,5 @@ if __name__ == '__main__':
 # mp spawn cleanup
 
 # final linting pass
+
+# [Sim] Ensured sleep intervals match HFT constraints
