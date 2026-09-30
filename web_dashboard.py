@@ -358,3 +358,5 @@ render_live_feed()
 # [CSS] Added neon green left-border to metric containers
 
 # [Opt] Used adjust=False for EMA to match industry standard
+
+# [Opt] Vectorized buy/sell classification using pandas diff
