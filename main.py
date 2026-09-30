@@ -68,3 +68,5 @@ if __name__ == '__main__':
 # [Process] Trap SIGINT for clean subprocess exit
 
 # [Opt] Added micro-sleep to idle spin lock
+
+# [Config] Duration hardcoded for infinite run
