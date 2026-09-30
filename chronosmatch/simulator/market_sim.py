@@ -89,3 +89,5 @@ if __name__ == "__main__":
 # [Sim] Verified bid/ask spread generation logic
 
 # [Sim] Adjusted GBM drift for mean-reversion
+
+# [Sim] Added boundary limits to standard deviation
