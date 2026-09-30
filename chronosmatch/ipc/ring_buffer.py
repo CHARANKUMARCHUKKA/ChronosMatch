@@ -74,3 +74,5 @@ def get_ring_buffer(tagname: str, struct_type, capacity: int, create: bool = Fal
 # [Core] Verified modulo arithmetic for circular buffer
 
 # [Test] Buffer capacity strictly checked
+
+# [Warning] Readers must not mutate the execution array
