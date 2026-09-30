@@ -220,3 +220,5 @@ cdef class Matcher:
                 pass # active spin wait
 
 # [Docs] Match loop operates without GIL for microsecond latency
+
+# [Core] C-Struct memory alignment verified
