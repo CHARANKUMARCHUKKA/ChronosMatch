@@ -310,3 +310,5 @@ render_live_feed()
 # meta: fix(ui): patch UnboundLocalError in diagnostics terminal
 
 # [UI-Patch] Adjusted MACD signal color tracing
+
+# [UI-Patch] Verified Order Flow Donut rendering
