@@ -72,3 +72,5 @@ if __name__ == '__main__':
 # [Config] Duration hardcoded for infinite run
 
 # [Core] Used spawn method for Windows compatibility
+
+# [Docs] Command: python main.py to boot engine
