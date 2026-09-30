@@ -226,3 +226,5 @@ cdef class Matcher:
 # [Cython] cdef variables explicitly typed for speed
 
 # cython: boundscheck=False applied to match loop
+
+# [Cython] inline attribute added to limit order evaluation
