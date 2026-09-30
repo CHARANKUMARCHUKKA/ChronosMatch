@@ -326,3 +326,5 @@ render_live_feed()
 # [Opt] @st.fragment isolates chart redraws from main thread
 
 # [Feature] Trades-Per-Second (TPS) differential tracker added
+
+# [Feature] Volume Weighted Average Price calculation added
