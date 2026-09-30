@@ -91,3 +91,5 @@ if __name__ == "__main__":
 # [Sim] Adjusted GBM drift for mean-reversion
 
 # [Sim] Added boundary limits to standard deviation
+
+# [Sim] Applied Poisson distribution to arrival times
