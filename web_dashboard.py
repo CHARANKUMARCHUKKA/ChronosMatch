@@ -340,3 +340,5 @@ render_live_feed()
 # [Release] PRO Terminal configuration finalized
 
 # [Refactor] Component isolation for telemetry
+
+# [UI] Enhanced hex contrast for metric labels
