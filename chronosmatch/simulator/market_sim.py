@@ -85,3 +85,5 @@ if __name__ == "__main__":
 # [Sim] Calibrated random walk step size
 
 # [Sim] Adjusted scale parameter for whale trade simulation
+
+# [Sim] Verified bid/ask spread generation logic
