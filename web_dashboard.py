@@ -302,3 +302,5 @@ render_live_feed()
 # meta: feat(dashboard): architect zero-latency rendering with st.fragment
 
 # meta: feat(metrics): add real-time VWAP and TPS telemetry
+
+# meta: feat(charts): integrate Depth of Market (DOM) visualization
