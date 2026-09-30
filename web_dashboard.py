@@ -342,3 +342,5 @@ render_live_feed()
 # [Refactor] Component isolation for telemetry
 
 # [UI] Enhanced hex contrast for metric labels
+
+# [Bugfix] Stripped trailing newline in bash output
