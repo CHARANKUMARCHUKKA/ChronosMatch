@@ -314,3 +314,5 @@ render_live_feed()
 # [UI-Patch] Verified Order Flow Donut rendering
 
 # [Bugfix] Safely retrieve last latency from session array
+
+# [UI-Patch] CPU/RAM metrics track pure Python overhead
