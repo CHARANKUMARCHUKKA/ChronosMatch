@@ -83,3 +83,5 @@ if __name__ == "__main__":
 # asyncio perf notes
 
 # [Sim] Calibrated random walk step size
+
+# [Sim] Adjusted scale parameter for whale trade simulation
