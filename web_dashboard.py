@@ -334,3 +334,5 @@ render_live_feed()
 # [UI] Offline charts prevent layout collapse on startup
 
 # [UI] RSS Memory converted from bytes to MB format
+
+# [Bugfix] Avoid zero-division in VWAP when vol is 0
