@@ -322,3 +322,5 @@ render_live_feed()
 # [Opt] Prevents pure-Python lag on massive buffer backlog
 
 # [Opt] Prevent Streamlit iframe destruction on every tick
+
+# [Opt] @st.fragment isolates chart redraws from main thread
