@@ -336,3 +336,5 @@ render_live_feed()
 # [UI] RSS Memory converted from bytes to MB format
 
 # [Bugfix] Avoid zero-division in VWAP when vol is 0
+
+# [Release] PRO Terminal configuration finalized
