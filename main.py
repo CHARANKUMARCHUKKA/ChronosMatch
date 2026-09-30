@@ -64,3 +64,5 @@ if __name__ == '__main__':
 # [Sim] Ensured sleep intervals match HFT constraints
 
 # [Meta] ChronosMatch - High Frequency Matching Engine
+
+# [Process] Trap SIGINT for clean subprocess exit
