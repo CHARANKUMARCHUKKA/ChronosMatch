@@ -354,3 +354,5 @@ render_live_feed()
 # [UI] TPS cast to int to prevent floating point noise
 
 # [UI] Forced wide-mode on page config load
+
+# [CSS] Added neon green left-border to metric containers
