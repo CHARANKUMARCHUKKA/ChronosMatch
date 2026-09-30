@@ -228,3 +228,5 @@ cdef class Matcher:
 # cython: boundscheck=False applied to match loop
 
 # [Cython] inline attribute added to limit order evaluation
+
+# [Cython] Removed PyObject dependencies from structs
