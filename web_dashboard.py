@@ -320,3 +320,5 @@ render_live_feed()
 # [Layout] Expanded telemetry block to 7 columns
 
 # [Opt] Prevents pure-Python lag on massive buffer backlog
+
+# [Opt] Prevent Streamlit iframe destruction on every tick
