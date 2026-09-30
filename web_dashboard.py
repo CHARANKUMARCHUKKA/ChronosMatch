@@ -300,3 +300,5 @@ render_live_feed()
 # contrast adjustments
 
 # meta: feat(dashboard): architect zero-latency rendering with st.fragment
+
+# meta: feat(metrics): add real-time VWAP and TPS telemetry
