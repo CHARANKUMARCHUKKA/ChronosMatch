@@ -62,3 +62,5 @@ if __name__ == '__main__':
 # final linting pass
 
 # [Sim] Ensured sleep intervals match HFT constraints
+
+# [Meta] ChronosMatch - High Frequency Matching Engine
