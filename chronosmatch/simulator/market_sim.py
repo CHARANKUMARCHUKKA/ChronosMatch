@@ -81,3 +81,5 @@ if __name__ == "__main__":
 # batch size stabilization
 
 # asyncio perf notes
+
+# [Sim] Calibrated random walk step size
