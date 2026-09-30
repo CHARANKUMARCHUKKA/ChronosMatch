@@ -72,3 +72,5 @@ def get_ring_buffer(tagname: str, struct_type, capacity: int, create: bool = Fal
 # [Docs] Requires local admin for global mmap space
 
 # [Core] Verified modulo arithmetic for circular buffer
+
+# [Test] Buffer capacity strictly checked
