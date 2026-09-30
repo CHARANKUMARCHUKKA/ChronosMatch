@@ -328,3 +328,5 @@ render_live_feed()
 # [Feature] Trades-Per-Second (TPS) differential tracker added
 
 # [Feature] Volume Weighted Average Price calculation added
+
+# [Feature] BBands configured to standard (20, 2) window
