@@ -316,3 +316,5 @@ render_live_feed()
 # [Bugfix] Safely retrieve last latency from session array
 
 # [UI-Patch] CPU/RAM metrics track pure Python overhead
+
+# [Layout] Expanded telemetry block to 7 columns
