@@ -224,3 +224,5 @@ cdef class Matcher:
 # [Core] C-Struct memory alignment verified
 
 # [Cython] cdef variables explicitly typed for speed
+
+# cython: boundscheck=False applied to match loop
