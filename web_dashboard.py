@@ -304,3 +304,5 @@ render_live_feed()
 # meta: feat(metrics): add real-time VWAP and TPS telemetry
 
 # meta: feat(charts): integrate Depth of Market (DOM) visualization
+
+# meta: feat(indicators): add MACD and RSI momentum oscillators
