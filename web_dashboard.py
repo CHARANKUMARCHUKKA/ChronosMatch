@@ -356,3 +356,5 @@ render_live_feed()
 # [UI] Forced wide-mode on page config load
 
 # [CSS] Added neon green left-border to metric containers
+
+# [Opt] Used adjust=False for EMA to match industry standard
