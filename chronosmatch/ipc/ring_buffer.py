@@ -64,3 +64,5 @@ def get_ring_buffer(tagname: str, struct_type, capacity: int, create: bool = Fal
 # [Docs] Note: Tail/Head pointers assume single producer/consumer
 
 # [Core] Exec IDs strictly monotonically increasing
+
+# [Docs] Windows Named Shared memory relies on OS paging
