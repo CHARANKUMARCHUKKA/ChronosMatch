@@ -97,3 +97,5 @@ if __name__ == "__main__":
 # [Sim] Whale orders generated at 5% probability
 
 # [Sim] Engine boot sequence logged to stdout
+
+# [Sim] Spread tightly bound to 0.05 ticks
