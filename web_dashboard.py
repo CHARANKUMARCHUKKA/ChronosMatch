@@ -350,3 +350,5 @@ render_live_feed()
 # [UI] DOM bars scale linearly with volume
 
 # [Bugfix] Empty dataframe initialization fallback
+
+# [UI] TPS cast to int to prevent floating point noise
