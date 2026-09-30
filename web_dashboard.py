@@ -346,3 +346,5 @@ render_live_feed()
 # [Bugfix] Stripped trailing newline in bash output
 
 # [UI] RSI 70/30 boundary lines annotated
+
+# [UI] DOM bars scale linearly with volume
