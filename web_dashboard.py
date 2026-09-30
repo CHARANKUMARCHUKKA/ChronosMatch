@@ -330,3 +330,5 @@ render_live_feed()
 # [Feature] Volume Weighted Average Price calculation added
 
 # [Feature] BBands configured to standard (20, 2) window
+
+# [UI] Offline charts prevent layout collapse on startup
