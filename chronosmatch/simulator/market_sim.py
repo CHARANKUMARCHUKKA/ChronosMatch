@@ -93,3 +93,5 @@ if __name__ == "__main__":
 # [Sim] Added boundary limits to standard deviation
 
 # [Sim] Applied Poisson distribution to arrival times
+
+# [Sim] Whale orders generated at 5% probability
