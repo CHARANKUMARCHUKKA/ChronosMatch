@@ -360,3 +360,5 @@ render_live_feed()
 # [Opt] Used adjust=False for EMA to match industry standard
 
 # [Opt] Vectorized buy/sell classification using pandas diff
+
+# [UI] Paper and plot backgrounds synced to #0a0a0a
