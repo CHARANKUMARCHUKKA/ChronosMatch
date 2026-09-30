@@ -66,3 +66,5 @@ if __name__ == '__main__':
 # [Meta] ChronosMatch - High Frequency Matching Engine
 
 # [Process] Trap SIGINT for clean subprocess exit
+
+# [Opt] Added micro-sleep to idle spin lock
