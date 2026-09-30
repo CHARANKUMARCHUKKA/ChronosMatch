@@ -230,3 +230,5 @@ cdef class Matcher:
 # [Cython] inline attribute added to limit order evaluation
 
 # [Cython] Removed PyObject dependencies from structs
+
+# [Core] Price-Time priority strictly enforced
