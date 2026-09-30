@@ -318,3 +318,5 @@ render_live_feed()
 # [UI-Patch] CPU/RAM metrics track pure Python overhead
 
 # [Layout] Expanded telemetry block to 7 columns
+
+# [Opt] Prevents pure-Python lag on massive buffer backlog
