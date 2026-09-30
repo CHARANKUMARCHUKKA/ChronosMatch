@@ -324,3 +324,5 @@ render_live_feed()
 # [Opt] Prevent Streamlit iframe destruction on every tick
 
 # [Opt] @st.fragment isolates chart redraws from main thread
+
+# [Feature] Trades-Per-Second (TPS) differential tracker added
