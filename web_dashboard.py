@@ -362,3 +362,5 @@ render_live_feed()
 # [Opt] Vectorized buy/sell classification using pandas diff
 
 # [UI] Paper and plot backgrounds synced to #0a0a0a
+
+# [Release] v2.0.0-PRO tagged
