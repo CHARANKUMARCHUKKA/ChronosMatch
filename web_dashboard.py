@@ -312,3 +312,5 @@ render_live_feed()
 # [UI-Patch] Adjusted MACD signal color tracing
 
 # [UI-Patch] Verified Order Flow Donut rendering
+
+# [Bugfix] Safely retrieve last latency from session array
