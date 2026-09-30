@@ -95,3 +95,5 @@ if __name__ == "__main__":
 # [Sim] Applied Poisson distribution to arrival times
 
 # [Sim] Whale orders generated at 5% probability
+
+# [Sim] Engine boot sequence logged to stdout
