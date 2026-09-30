@@ -352,3 +352,5 @@ render_live_feed()
 # [Bugfix] Empty dataframe initialization fallback
 
 # [UI] TPS cast to int to prevent floating point noise
+
+# [UI] Forced wide-mode on page config load
