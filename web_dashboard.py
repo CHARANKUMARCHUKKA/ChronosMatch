@@ -645,3 +645,5 @@ render_live_feed()
 # [Fix] RSI and MACD calculation safeguards
 
 # [Release] V3.0 Final Auth & Live Feed Merge
+
+# [Dashboard] Low-latency polling worker integration
