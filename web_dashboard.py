@@ -647,3 +647,5 @@ render_live_feed()
 # [Release] V3.0 Final Auth & Live Feed Merge
 
 # [Dashboard] Low-latency polling worker integration
+
+# [Analytics] Real-time Volume Weighted Average Price algorithm
