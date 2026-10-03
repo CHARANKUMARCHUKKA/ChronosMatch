@@ -649,3 +649,5 @@ render_live_feed()
 # [Dashboard] Low-latency polling worker integration
 
 # [Analytics] Real-time Volume Weighted Average Price algorithm
+
+# [UI-Perf] Isolated DOM updates to st.fragment boundary
