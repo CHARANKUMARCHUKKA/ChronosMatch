@@ -651,3 +651,5 @@ render_live_feed()
 # [Analytics] Real-time Volume Weighted Average Price algorithm
 
 # [UI-Perf] Isolated DOM updates to st.fragment boundary
+
+# [Indicators] Technical oscillator calculation routines
