@@ -4,7 +4,7 @@ import os
 import sys
 import ctypes
 
-from chronosmatch.simulator.market_sim import simulate_firehose
+from chronosmatch.simulator.binance_feed import run_binance_feed
 from chronosmatch.monitor.latency_monitor import run_monitor
 from chronosmatch.ipc.ring_buffer import get_ring_buffer, Order, Execution
 
@@ -30,7 +30,7 @@ def run_engine():
 
 def run_simulator():
     import asyncio
-    asyncio.run(simulate_firehose(duration=36000, orders_per_sec=20000))
+    asyncio.run(run_binance_feed())
 
 if __name__ == '__main__':
     # Fix for Windows multiprocessing
@@ -78,3 +78,5 @@ if __name__ == '__main__':
 # [Chore] Flake8/Black linting applied
 
 # [Docs] Dashboard now requires 3D WebGL acceleration
+
+# [Engine] Using binance_feed.py for inbound telemetry
