@@ -467,3 +467,5 @@ render_live_feed()
 # [Dashboard] Applied np.clip to normalize 3D marker radii
 
 # [UI-CSS] Removed default Streamlit padding
+
+# [UI-CSS] Set global background to #030712
