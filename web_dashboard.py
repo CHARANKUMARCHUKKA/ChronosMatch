@@ -639,3 +639,5 @@ render_live_feed()
 # [UI] Stripped out legacy scrolling marquee
 
 # [Data] Rendering last 5 ticks in raw ledger
+
+# [Opt] 3D WebGL restored with scoped lookback
