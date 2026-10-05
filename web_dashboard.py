@@ -465,3 +465,5 @@ render_live_feed()
 # [Dashboard] Green/Red array mapping for 3D markers
 
 # [Dashboard] Applied np.clip to normalize 3D marker radii
+
+# [UI-CSS] Removed default Streamlit padding
