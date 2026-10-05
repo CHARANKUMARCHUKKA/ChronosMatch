@@ -623,3 +623,5 @@ render_live_feed()
 # [CSS] Aurora gradient animation added
 
 # [Auth] Email state triggers password field
+
+# [UI] Added Google and Apple SSO layout
