@@ -455,3 +455,5 @@ render_live_feed()
 # [UI-CSS] Hidden MainMenu and footer components
 
 # [UI-CSS] Added inset shadow and blue top-borders to metrics
+
+# [Dashboard] Swapped go.Scatter for go.Candlestick
