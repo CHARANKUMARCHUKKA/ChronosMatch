@@ -633,3 +633,5 @@ render_live_feed()
 # [Fix] Prevented CSS leaking into login wall
 
 # [Fix] Bound left form container to 45vw max-width
+
+# [Fix] Moved H2 injection post-auth wall
