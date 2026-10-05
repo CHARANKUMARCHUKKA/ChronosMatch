@@ -53,3 +53,5 @@ if __name__ == "__main__":
     asyncio.run(run_binance_feed())
 
 # [Data] Connecting to wss://stream.binance.com:9443
+
+# [Data] Scaling fractional BTC sizes for uint32
