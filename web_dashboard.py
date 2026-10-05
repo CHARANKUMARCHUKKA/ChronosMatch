@@ -10,73 +10,207 @@ from chronosmatch.ipc.ring_buffer import get_ring_buffer, Execution
 st.set_page_config(page_title="ChronosMatch // Terminal", layout="wide", page_icon="⚡", initial_sidebar_state="collapsed")
 
 # Custom CSS for 10-Year Senior Engineer Institutional Aesthetic
-st.markdown("""
-<style>
-    /* Hide Amateur Streamlit Branding */
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
-    
-    /* Global Font & Spacing Constraints */
-    .block-container {
-        padding-top: 1rem !important;
-        padding-bottom: 1rem !important;
-        padding-left: 2rem !important;
-        padding-right: 2rem !important;
-        max-width: 100% !important;
-        font-family: 'Consolas', 'Courier New', monospace !important;
-        background-color: #030712;
-    }
-    .stApp { background-color: #030712; color: #d1d5db; }
-    
-    /* Hardware-Style LCD Metric Panels */
-    div[data-testid="metric-container"] {
-        background-color: #0b0f19; 
-        border: 1px solid #1f2937; 
-        padding: 12px 15px; 
-        border-radius: 2px;
-        box-shadow: inset 0 0 15px rgba(0,0,0,0.8);
-        border-top: 2px solid #3b82f6;
-    }
-    div[data-testid="metric-container"] > label { 
-        color: #6b7280 !important; 
-        font-size: 0.70rem !important; 
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        font-family: 'Consolas', monospace !important;
-    }
-    div[data-testid="metric-container"] > div { 
-        color: #f3f4f6 !important; 
-        font-size: 1.6rem !important; 
-        font-weight: bold !important;
-        font-family: 'Consolas', monospace !important;
-    }
-    
-    /* Institutional Headers */
-    h1, h2, h3, h4 { 
-        font-family: 'Consolas', monospace !important; 
-        color: #9ca3af !important; 
-        text-transform: uppercase; 
-        letter-spacing: 1.5px;
-        border-bottom: 1px solid #1f2937;
-        padding-bottom: 5px;
-    }
-    
-    /* Command Console Block */
-    .control-panel { 
-        background: linear-gradient(180deg, #111827 0%, #030712 100%);
-        padding: 15px; 
-        border-radius: 2px; 
-        border: 1px solid #374151; 
-        margin-bottom: 25px;
-    }
-    
-    /* Terminal Log Customization */
-    .stCodeBlock { border: 1px solid #374151 !important; }
-</style>
-""", unsafe_allow_html=True)
+if st.session_state.get('logged_in', False):
+    st.markdown("""
+    <style>
+        /* Hide Streamlit Branding */
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
+        header {visibility: hidden;}
+        
+        /* Strict Enterprise Spacing */
+        .block-container {
+            padding: 1rem 2rem !important;
+            max-width: 100% !important;
+            font-family: 'Consolas', 'Courier New', monospace !important;
+            background-color: #000000;
+        }
+        .stApp { background-color: #000000; color: #c9d1d9; }
+        
+        /* Brutalist Hardware Panels */
+        div[data-testid="metric-container"] {
+            background-color: #0d1117; 
+            border: 1px solid #30363d; 
+            padding: 10px 15px; 
+            border-radius: 0px;
+            border-top: 2px solid #58a6ff;
+        }
+        div[data-testid="metric-container"] > label { 
+            color: #8b949e !important; 
+            font-size: 0.70rem !important; 
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        div[data-testid="metric-container"] > div { 
+            color: #e6edf3 !important; 
+            font-size: 1.4rem !important; 
+            font-weight: 600 !important;
+        }
+        
+        /* Institutional Headers */
+        h1, h2, h3, h4 { 
+            font-family: 'Consolas', monospace !important; 
+            color: #8b949e !important; 
+            text-transform: uppercase; 
+            font-size: 14px !important;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 4px;
+            margin-bottom: 10px;
+        }
+        
+        /* Strict Enterprise Buttons */
+        .stButton > button {
+            background-color: #21262d !important;
+            color: #c9d1d9 !important;
+            border: 1px solid #30363d !important;
+            border-radius: 0px !important;
+            text-transform: uppercase;
+            font-size: 12px !important;
+        }
+        .stButton > button:hover {
+            background-color: #30363d !important;
+            border-color: #8b949e !important;
+        }
+        
+        /* Command Console Block */
+        .control-panel { 
+            background: #0d1117;
+            padding: 12px; 
+            border-radius: 0px; 
+            border: 1px solid #30363d; 
+            margin-bottom: 20px;
+        }
+        
+        /* Terminal Log */
+        .stCodeBlock { border: 1px solid #30363d !important; background: #000000 !important; }
+    </style>
+    """, unsafe_allow_html=True)
 
-st.markdown("<h2 style='color:#f3f4f6!important;'>CHRONOSMATCH // INSTITUTIONAL MATCHING ENGINE V2.4</h2>", unsafe_allow_html=True)
+
+
+if 'logged_in' not in st.session_state:
+    st.session_state.logged_in = False
+
+
+if not st.session_state.logged_in:
+    # B2B SaaS Split Screen CSS
+    st.markdown('''
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        /* Global Font Override */
+        html, body, [class*="css"] { font-family: 'Inter', sans-serif !important; }
+        
+        /* Ensure the main container spans full width so columns work */
+        .block-container {
+            max-width: 100% !important;
+            padding: 0 !important;
+            background: #09090b !important;
+        }
+        .stApp { background: #09090b !important; }
+        
+        /* Right Panel Aurora Glass */
+        .split-right {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 55vw;
+            height: 100vh;
+            background: linear-gradient(-45deg, #4f46e5, #ec4899, #0ea5e9, #8b5cf6);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            z-index: 100;
+            border-left: 1px solid rgba(255,255,255,0.05);
+        }
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Glass overlay */
+        .glass-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(80px);
+        }
+
+        /* Typography & Inputs */
+        h1 { font-weight: 700 !important; font-size: 2.2rem !important; color: #ffffff !important; letter-spacing: -1px; margin-bottom: 5px; }
+        p { color: #a1a1aa !important; font-size: 0.95rem !important; margin-bottom: 30px; }
+        
+        .stTextInput label { font-weight: 500 !important; color: #e4e4e7 !important; font-size: 0.9rem !important; }
+        .stTextInput input {
+            background: #18181b !important; border: 1px solid #27272a !important; color: #fff !important;
+            border-radius: 8px !important; padding: 14px 16px !important; font-size: 15px !important; transition: all 0.2s;
+        }
+        .stTextInput input:focus { border-color: #3b82f6 !important; box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3) !important; }
+        
+        /* Vibrant CTA */
+        .stButton > button {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6) !important; color: white !important;
+            border: none !important; border-radius: 8px !important; padding: 14px !important;
+            font-weight: 600 !important; font-size: 15px !important; transition: all 0.2s ease !important;
+            box-shadow: 0 4px 14px 0 rgba(139, 92, 246, 0.39) !important; text-transform: none !important;
+        }
+        .stButton > button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6) !important; color: white !important; }
+        
+        /* Social Buttons */
+        .social-btn {
+            display: inline-block; width: 48%; text-align: center; background: #18181b; border: 1px solid #27272a;
+            border-radius: 8px; padding: 12px; cursor: pointer; transition: 0.2s; color: white; text-decoration: none; font-weight: 500; font-size: 14px;
+        }
+        .social-btn:hover { background: #27272a; border-color: #3f3f46; color: white; }
+        .social-container { display: flex; justify-content: space-between; margin-bottom: 25px; }
+    </style>
+    
+    <div class="split-right">
+        <div class="glass-overlay"></div>
+        <div style="position: absolute; bottom: 60px; right: 60px; text-align: right; color: rgba(255,255,255,0.9); font-weight: 500; font-family: 'Inter', sans-serif;">
+            <h2 style="font-size: 2rem; margin-bottom: 5px; color: white; border-bottom: none;">ChronosMatch Analytics</h2>
+            <p style="color: rgba(255,255,255,0.6)!important; font-size: 1rem!important;">Enterprise-grade microstructure telemetry.</p>
+        </div>
+    </div>
+    ''', unsafe_allow_html=True)
+    
+    # We use Streamlit columns to force the form entirely onto the left half of the screen
+    left_col, right_col = st.columns([0.8, 1.2]) 
+    
+    with left_col:
+        st.markdown("<div style='padding: 8vh 4vw;'>", unsafe_allow_html=True)
+        st.markdown("<h1>Welcome back</h1>", unsafe_allow_html=True)
+        st.markdown("<p>Log in to your ChronosMatch workspace.</p>", unsafe_allow_html=True)
+        
+        st.markdown('''
+        <div class="social-container">
+            <a class="social-btn">Google</a>
+            <a class="social-btn">Apple</a>
+        </div>
+        <div style="text-align: center; color: #52525b; font-size: 12px; margin-bottom: 25px; text-transform: uppercase; font-weight: 600; letter-spacing: 1px;">or continue with email</div>
+        ''', unsafe_allow_html=True)
+        
+        email = st.text_input("Email address", placeholder="name@company.com")
+        
+        if email:
+            password = st.text_input("Password", type="password", placeholder="••••••••")
+            st.markdown("<div style='text-align: right; margin-top: -10px; margin-bottom: 10px;'><a href='#' style='color: #8b5cf6; font-size: 13px; text-decoration: none; font-weight: 500;'>Forgot password?</a></div>", unsafe_allow_html=True)
+            
+            if st.button("Log in", use_container_width=True):
+                if password == "admin":
+                    st.session_state.logged_in = True
+                    st.rerun()
+                else:
+                    st.error("That password is not right. Reset it?")
+        else:
+            st.button("Continue", use_container_width=True)
+            
+        st.markdown("<p style='text-align: center; margin-top: 30px; font-size: 14px; color: #a1a1aa;'>New here? <a href='#' style='color: #8b5cf6; text-decoration: none; font-weight: 500;'>Create an account</a></p>", unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
+        
+    st.stop()
+
+st.markdown("<h2 style='color:#e6edf3!important; border-bottom: 1px solid #30363d; padding-bottom: 8px;'>CHRONOSMATCH // QUANTITATIVE RESEARCH TERMINAL V3.0</h2>", unsafe_allow_html=True)
+
 
 if 'monitoring' not in st.session_state:
     st.session_state.monitoring = False
@@ -101,9 +235,9 @@ with c1:
 with c2:
     accent_color = st.selectbox("HUD OVERLAY THEME", ["Cyan (#06b6d4)", "Matrix (#10b981)", "Crimson (#ef4444)", "Gold (#f59e0b)"])
     hex_color = accent_color.split("(")[1][:-1]
-    refresh_rate = st.slider("SYSTEM TICK RATE (SEC)", 0.1, 2.0, 0.3)
+    refresh_rate = st.slider("SYSTEM TICK RATE (SEC)", 0.5, 3.0, 1.0)
 with c3:
-    lookback_window = st.select_slider("TELEMETRY LOOKBACK WINDOW", [100, 300, 500, 1000, 2000], 500)
+    lookback_window = st.select_slider("TELEMETRY LOOKBACK WINDOW", [100, 300, 500, 1000, 2000], 100)
     show_bbands = st.checkbox("ENABLE BOLLINGER BANDS (20, 2)", True)
     show_rsi = st.checkbox("ENABLE RSI OSCILLATOR", True)
 with c4:
@@ -127,7 +261,8 @@ def render_live_feed():
         m7.metric("SYSTEM RAM", "--- MB")
         
         col_px, col_dom = st.columns([2, 1])
-        col_rsi, col_macd, col_flow = st.columns([1, 1, 1])
+        col_3d, col_flow = st.columns([2, 1])
+        col_rsi, col_macd, col_spacer = st.columns([1, 1, 1])
         col_lat, col_hist = st.columns([2, 1])
         col_table, col_log = st.columns([2, 1])
         
@@ -225,7 +360,8 @@ def render_live_feed():
         m7.metric("SYS CPU / RAM", f"{process.cpu_percent()}% / {process.memory_info().rss / (1024 * 1024):.0f}MB")
         
         col_px, col_dom = st.columns([2, 1])
-        col_rsi, col_macd, col_flow = st.columns([1, 1, 1])
+        col_3d, col_flow = st.columns([2, 1])
+        col_rsi, col_macd, col_spacer = st.columns([1, 1, 1])
         col_lat, col_hist = st.columns([2, 1])
         col_table, col_log = st.columns([2, 1])
         
@@ -233,6 +369,10 @@ def render_live_feed():
         plot_prices = prices[-lookback_window:]
         plot_sizes = sizes[-lookback_window:]
         df = pd.DataFrame({"Trade": range(len(plot_lats)), "Latency (µs)": plot_lats, "Price": plot_prices, "Size": plot_sizes})
+        
+        # 0. Raw Execution Ledger (Tape)
+        st.markdown("<h4 style='margin-top: 10px; font-size: 12px!important;'>RAW EXECUTION TAPE</h4>", unsafe_allow_html=True)
+        st.dataframe(df[['Trade', 'Latency (µs)', 'Price', 'Size']].tail(5).iloc[::-1], use_container_width=True, hide_index=True)
         
         # 1. Price Action: Advanced OHLC Candlestick Chart
         df['Bin'] = df.index // 15  # Group every 15 ticks into a candle
@@ -251,7 +391,7 @@ def render_live_feed():
             fig_px.add_trace(go.Scatter(x=ohlc['Trade'], y=ohlc['SMA20'] - 2*ohlc['STD20'], mode='lines', fill='tonexty', fillcolor='rgba(255,255,255,0.05)', line=dict(dash='dash', color='rgba(255,255,255,0.3)'), name='Lower BB'))
             fig_px.add_trace(go.Scatter(x=ohlc['Trade'], y=ohlc['SMA20'], mode='lines', line=dict(dash='dot', color='orange'), name='SMA 20'))
             
-        fig_px.update_layout(title="Live Candlestick Action & Volatility", plot_bgcolor='#0a0a0a', paper_bgcolor='#0a0a0a', font_color='#c9d1d9', margin=dict(l=0, r=0, t=40, b=0), showlegend=False, xaxis_rangeslider_visible=False)
+        fig_px.update_layout(title="Live Candlestick Action & Volatility", plot_bgcolor='#030712', paper_bgcolor='#030712', font_color='#c9d1d9', margin=dict(l=0, r=0, t=40, b=0), showlegend=False, xaxis_rangeslider_visible=False)
         fig_px.update_yaxes(range=[min(plot_prices) - 0.2, max(plot_prices) + 0.2])
         col_px.plotly_chart(fig_px, use_container_width=True, key="px_chart")
         
@@ -265,12 +405,11 @@ def render_live_feed():
         fig_dom = go.Figure()
         fig_dom.add_trace(go.Bar(y=bids_px, x=bids_vol, orientation='h', name='Bids', marker_color='rgba(0, 255, 136, 0.7)'))
         fig_dom.add_trace(go.Bar(y=asks_px, x=asks_vol, orientation='h', name='Asks', marker_color='rgba(255, 68, 68, 0.7)'))
-        fig_dom.update_layout(title="Order Book Depth (DOM)", barmode='overlay', plot_bgcolor='#0a0a0a', paper_bgcolor='#0a0a0a', font_color='#c9d1d9', margin=dict(l=0, r=0, t=40, b=0), showlegend=False)
+        fig_dom.update_layout(title="Order Book Depth (DOM)", barmode='overlay', plot_bgcolor='#030712', paper_bgcolor='#030712', font_color='#c9d1d9', margin=dict(l=0, r=0, t=40, b=0), showlegend=False)
         fig_dom.update_yaxes(range=[min(bids_px)-0.1, max(asks_px)+0.1])
         col_dom.plotly_chart(fig_dom, use_container_width=True, key="dom_chart")
         
-        # NEW ROW: 3D Visualization
-        col_3d, col_empty = st.columns([2, 1])
+        # NEW ROW: 3D Visualization & Order Flow
         
         # 3. 3D Micro-Structure Trade Visualizer
         delta = df['Price'].diff()
@@ -288,7 +427,7 @@ def render_live_feed():
         )])
         fig_3d.update_layout(
             title="3D Micro-Structure Order Flow",
-            plot_bgcolor='#0a0a0a', paper_bgcolor='#0a0a0a', font_color='#c9d1d9',
+            plot_bgcolor='#030712', paper_bgcolor='#030712', font_color='#c9d1d9',
             scene=dict(
                 xaxis_title='Time', yaxis_title='Price', zaxis_title='Volume',
                 xaxis=dict(backgroundcolor='#111', gridcolor='#333'),
@@ -297,15 +436,16 @@ def render_live_feed():
             ),
             margin=dict(l=0, r=0, b=0, t=40)
         )
-        col_3d.plotly_chart(fig_3d, use_container_width=True, key="3d_chart")
+        col_3d.plotly_chart(fig_3d, use_container_width=True, key='3d_chart')
         
         # 4. Order Flow Imbalance (Donut)
+        delta = df['Price'].diff()
         buy_vol = df.loc[delta > 0, 'Size'].sum()
         sell_vol = df.loc[delta < 0, 'Size'].sum()
         fig_flow = go.Figure(data=[go.Pie(labels=['Buy Pressure', 'Sell Pressure'], values=[buy_vol, sell_vol], hole=.6)])
         fig_flow.update_traces(marker=dict(colors=['rgba(0, 255, 136, 0.7)', 'rgba(255, 68, 68, 0.7)']), textinfo='percent')
-        fig_flow.update_layout(title="Order Flow Imbalance", plot_bgcolor='#0a0a0a', paper_bgcolor='#0a0a0a', font_color='#c9d1d9', margin=dict(l=0, r=0, t=40, b=0), showlegend=False)
-        col_empty.plotly_chart(fig_flow, use_container_width=True, key="flow_chart")
+        fig_flow.update_layout(title="Order Flow Imbalance", plot_bgcolor='#030712', paper_bgcolor='#030712', font_color='#c9d1d9', margin=dict(l=0, r=0, t=40, b=0), showlegend=False)
+        col_flow.plotly_chart(fig_flow, use_container_width=True, key="flow_chart")
         
         # 5. RSI Oscillator
         if show_rsi and len(df) > 14:
@@ -317,7 +457,7 @@ def render_live_feed():
             fig_rsi.add_hline(y=70, line_dash="dot", line_color="rgba(255, 68, 68, 0.7)")
             fig_rsi.add_hline(y=30, line_dash="dot", line_color="rgba(0, 255, 136, 0.7)")
             fig_rsi.update_traces(line_color='#d2a8ff')
-            fig_rsi.update_layout(plot_bgcolor='#0a0a0a', paper_bgcolor='#0a0a0a', font_color='#c9d1d9', margin=dict(l=0, r=0, t=40, b=0))
+            fig_rsi.update_layout(plot_bgcolor='#030712', paper_bgcolor='#030712', font_color='#c9d1d9', margin=dict(l=0, r=0, t=40, b=0))
             fig_rsi.update_yaxes(range=[0, 100])
             col_rsi.plotly_chart(fig_rsi, use_container_width=True, key="rsi_chart")
         
@@ -330,21 +470,21 @@ def render_live_feed():
             fig_macd = go.Figure()
             fig_macd.add_trace(go.Scatter(x=df['Trade'], y=df['MACD'], mode='lines', line=dict(color=hex_color), name='MACD'))
             fig_macd.add_trace(go.Scatter(x=df['Trade'], y=df['Signal'], mode='lines', line=dict(color='orange'), name='Signal'))
-            fig_macd.update_layout(title="MACD (12, 26, 9)", plot_bgcolor='#0a0a0a', paper_bgcolor='#0a0a0a', font_color='#c9d1d9', margin=dict(l=0, r=0, t=40, b=0), showlegend=False)
+            fig_macd.update_layout(title="MACD (12, 26, 9)", plot_bgcolor='#030712', paper_bgcolor='#030712', font_color='#c9d1d9', margin=dict(l=0, r=0, t=40, b=0), showlegend=False)
             col_macd.plotly_chart(fig_macd, use_container_width=True, key="macd_chart")
             
         # 7. Latency Chart
         fig_lat = px.area(df, x="Trade", y="Latency (µs)", title="Execution Latency Telemetry")
         fig_lat.update_traces(line_color=hex_color, fillcolor=f'rgba({int(hex_color[1:3], 16)}, {int(hex_color[3:5], 16)}, {int(hex_color[5:7], 16)}, 0.1)')
         fig_lat.add_hline(y=latency_alert, line_dash="dot", line_color="red")
-        fig_lat.update_layout(plot_bgcolor='#0a0a0a', paper_bgcolor='#0a0a0a', font_color='#c9d1d9', margin=dict(l=0, r=0, t=40, b=0))
+        fig_lat.update_layout(plot_bgcolor='#030712', paper_bgcolor='#030712', font_color='#c9d1d9', margin=dict(l=0, r=0, t=40, b=0))
         fig_lat.update_yaxes(range=[0, max(50, max_lat * 1.2)])
         col_lat.plotly_chart(fig_lat, use_container_width=True, key="lat_chart")
         
         # 8. Latency Histogram
         fig_hist = px.histogram(df, x="Latency (µs)", nbins=20, title="Latency Distribution Profile")
         fig_hist.update_traces(marker_color=hex_color)
-        fig_hist.update_layout(plot_bgcolor='#0a0a0a', paper_bgcolor='#0a0a0a', font_color='#c9d1d9', margin=dict(l=0, r=0, t=40, b=0))
+        fig_hist.update_layout(plot_bgcolor='#030712', paper_bgcolor='#030712', font_color='#c9d1d9', margin=dict(l=0, r=0, t=40, b=0))
         col_hist.plotly_chart(fig_hist, use_container_width=True, key="hist_chart")
         
         # 8. Whale Ticker Tape
@@ -446,7 +586,7 @@ render_live_feed()
 
 # [Opt] Vectorized buy/sell classification using pandas diff
 
-# [UI] Paper and plot backgrounds synced to #0a0a0a
+# [UI] Paper and plot backgrounds synced to #030712
 
 # [Release] v2.0.0-PRO tagged
 
@@ -475,3 +615,5 @@ render_live_feed()
 # [Dashboard] Unified Plotly layout backgrounds
 
 # [Release] V2.4 UI Overhaul locked and merged
+
+# [Auth] Adding session_state.logged_in tracker
