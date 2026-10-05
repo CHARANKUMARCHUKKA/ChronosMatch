@@ -641,3 +641,5 @@ render_live_feed()
 # [Data] Rendering last 5 ticks in raw ledger
 
 # [Opt] 3D WebGL restored with scoped lookback
+
+# [Fix] RSI and MACD calculation safeguards
