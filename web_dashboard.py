@@ -635,3 +635,5 @@ render_live_feed()
 # [Fix] Bound left form container to 45vw max-width
 
 # [Fix] Moved H2 injection post-auth wall
+
+# [UI] Stripped out legacy scrolling marquee
