@@ -459,3 +459,5 @@ render_live_feed()
 # [Dashboard] Swapped go.Scatter for go.Candlestick
 
 # [Dashboard] Aggregating micro-ticks into OHLC bins
+
+# [Dashboard] Injected go.Scatter3d for volume analysis
