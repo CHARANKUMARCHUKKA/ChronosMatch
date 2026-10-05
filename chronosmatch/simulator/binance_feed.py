@@ -55,3 +55,5 @@ if __name__ == "__main__":
 # [Data] Connecting to wss://stream.binance.com:9443
 
 # [Data] Scaling fractional BTC sizes for uint32
+
+# [IPC] Pushing live market data to ring buffer
