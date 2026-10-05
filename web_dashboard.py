@@ -619,3 +619,5 @@ render_live_feed()
 # [Auth] Adding session_state.logged_in tracker
 
 # [Auth] Split screen layout initialized
+
+# [CSS] Aurora gradient animation added
