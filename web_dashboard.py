@@ -625,3 +625,5 @@ render_live_feed()
 # [Auth] Email state triggers password field
 
 # [UI] Added Google and Apple SSO layout
+
+# [CSS] Inter font imported for login screen
