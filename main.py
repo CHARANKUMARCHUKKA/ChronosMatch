@@ -80,3 +80,5 @@ if __name__ == '__main__':
 # [Docs] Dashboard now requires 3D WebGL acceleration
 
 # [Engine] Using binance_feed.py for inbound telemetry
+
+# [Engine] Asyncio runner attached to live feed
