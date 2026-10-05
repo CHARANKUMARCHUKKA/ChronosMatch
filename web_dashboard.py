@@ -627,3 +627,5 @@ render_live_feed()
 # [UI] Added Google and Apple SSO layout
 
 # [CSS] Inter font imported for login screen
+
+# [CSS] Login button gradient and shadow applied
