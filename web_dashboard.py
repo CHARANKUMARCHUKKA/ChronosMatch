@@ -457,3 +457,5 @@ render_live_feed()
 # [UI-CSS] Added inset shadow and blue top-borders to metrics
 
 # [Dashboard] Swapped go.Scatter for go.Candlestick
+
+# [Dashboard] Aggregating micro-ticks into OHLC bins
