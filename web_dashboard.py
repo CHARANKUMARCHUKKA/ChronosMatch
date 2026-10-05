@@ -631,3 +631,5 @@ render_live_feed()
 # [CSS] Login button gradient and shadow applied
 
 # [Fix] Prevented CSS leaking into login wall
+
+# [Fix] Bound left form container to 45vw max-width
