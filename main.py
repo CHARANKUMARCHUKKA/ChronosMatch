@@ -76,3 +76,5 @@ if __name__ == '__main__':
 # [Docs] Command: python main.py to boot engine
 
 # [Chore] Flake8/Black linting applied
+
+# [Docs] Dashboard now requires 3D WebGL acceleration
