@@ -7,24 +7,76 @@ import psutil
 import numpy as np
 from chronosmatch.ipc.ring_buffer import get_ring_buffer, Execution
 
-st.set_page_config(page_title="ChronosMatch Terminal", layout="wide", page_icon="📈", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="ChronosMatch // Terminal", layout="wide", page_icon="⚡", initial_sidebar_state="collapsed")
 
-# Custom CSS for Terminal
+# Custom CSS for 10-Year Senior Engineer Institutional Aesthetic
 st.markdown("""
 <style>
-    .stApp { background-color: #0a0a0a; color: #c9d1d9; }
-    div[data-testid="metric-container"] {
-        background-color: #111; border: 1px solid #333; padding: 15px; border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 255, 136, 0.05); border-left: 3px solid #00ff88;
+    /* Hide Amateur Streamlit Branding */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    
+    /* Global Font & Spacing Constraints */
+    .block-container {
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
+        padding-left: 2rem !important;
+        padding-right: 2rem !important;
+        max-width: 100% !important;
+        font-family: 'Consolas', 'Courier New', monospace !important;
+        background-color: #030712;
     }
-    div[data-testid="metric-container"] > label { color: #888 !important; font-family: monospace; font-size: 14px;}
-    div[data-testid="metric-container"] > div { color: #00ff88 !important; font-family: monospace; }
-    h1, h2, h3, h4 { font-family: monospace; color: #58a6ff !important; text-transform: uppercase; }
-    .control-panel { background-color: #111; padding: 15px; border-radius: 5px; border: 1px solid #333; margin-bottom: 20px;}
+    .stApp { background-color: #030712; color: #d1d5db; }
+    
+    /* Hardware-Style LCD Metric Panels */
+    div[data-testid="metric-container"] {
+        background-color: #0b0f19; 
+        border: 1px solid #1f2937; 
+        padding: 12px 15px; 
+        border-radius: 2px;
+        box-shadow: inset 0 0 15px rgba(0,0,0,0.8);
+        border-top: 2px solid #3b82f6;
+    }
+    div[data-testid="metric-container"] > label { 
+        color: #6b7280 !important; 
+        font-size: 0.70rem !important; 
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        font-family: 'Consolas', monospace !important;
+    }
+    div[data-testid="metric-container"] > div { 
+        color: #f3f4f6 !important; 
+        font-size: 1.6rem !important; 
+        font-weight: bold !important;
+        font-family: 'Consolas', monospace !important;
+    }
+    
+    /* Institutional Headers */
+    h1, h2, h3, h4 { 
+        font-family: 'Consolas', monospace !important; 
+        color: #9ca3af !important; 
+        text-transform: uppercase; 
+        letter-spacing: 1.5px;
+        border-bottom: 1px solid #1f2937;
+        padding-bottom: 5px;
+    }
+    
+    /* Command Console Block */
+    .control-panel { 
+        background: linear-gradient(180deg, #111827 0%, #030712 100%);
+        padding: 15px; 
+        border-radius: 2px; 
+        border: 1px solid #374151; 
+        margin-bottom: 25px;
+    }
+    
+    /* Terminal Log Customization */
+    .stCodeBlock { border: 1px solid #374151 !important; }
 </style>
 """, unsafe_allow_html=True)
 
-st.title("⚡ CHRONOSMATCH HFT TERMINAL // PRO")
+st.markdown("<h2 style='color:#f3f4f6!important;'>CHRONOSMATCH // INSTITUTIONAL MATCHING ENGINE V2.4</h2>", unsafe_allow_html=True)
 
 if 'monitoring' not in st.session_state:
     st.session_state.monitoring = False
@@ -39,25 +91,24 @@ def toggle_monitoring():
 
 # --- MAIN CONTROL PANEL ---
 st.markdown("<div class='control-panel'>", unsafe_allow_html=True)
-st.subheader("⚙️ SYSTEM CONFIGURATION & ALGO OPTIONS")
 c1, c2, c3, c4 = st.columns(4)
 with c1:
-    st.button("⏹ STOP ENGINE FEED" if st.session_state.monitoring else "▶ START ENGINE FEED", on_click=toggle_monitoring, type="primary", use_container_width=True)
+    st.button("TERMINATE IPC LINK" if st.session_state.monitoring else "INITIATE IPC LINK", on_click=toggle_monitoring, type="primary", use_container_width=True)
     if st.session_state.monitoring:
-        st.success("🟢 DATA LINK: ACTIVE")
+        st.success("STATUS: CONNECTED [ZERO-COPY RING BUFFER ACTIVE]")
     else:
-        st.error("🔴 DATA LINK: OFFLINE")
+        st.error("STATUS: DISCONNECTED [AWAITING INITIALIZATION]")
 with c2:
-    accent_color = st.selectbox("UI Theme", ["Neon Green (#00ff88)", "Cyber Blue (#58a6ff)", "Hacker Red (#ff4444)", "Gold (#ffd700)"])
+    accent_color = st.selectbox("HUD OVERLAY THEME", ["Cyan (#06b6d4)", "Matrix (#10b981)", "Crimson (#ef4444)", "Gold (#f59e0b)"])
     hex_color = accent_color.split("(")[1][:-1]
-    refresh_rate = st.slider("UI Tick Rate (s)", 0.1, 2.0, 0.3)
+    refresh_rate = st.slider("SYSTEM TICK RATE (SEC)", 0.1, 2.0, 0.3)
 with c3:
-    lookback_window = st.select_slider("Data Lookback Window", [100, 300, 500, 1000, 2000], 500)
-    show_bbands = st.checkbox("Overlay Bollinger Bands (20, 2)", True)
-    show_rsi = st.checkbox("Show RSI (14) Oscillator", True)
+    lookback_window = st.select_slider("TELEMETRY LOOKBACK WINDOW", [100, 300, 500, 1000, 2000], 500)
+    show_bbands = st.checkbox("ENABLE BOLLINGER BANDS (20, 2)", True)
+    show_rsi = st.checkbox("ENABLE RSI OSCILLATOR", True)
 with c4:
-    latency_alert = st.slider("Latency Alert Trigger (µs)", 1.0, 50.0, 20.0)
-    whale_filter = st.slider("Tape Whale Filter (Size ≥)", 1, 200, 50)
+    latency_alert = st.slider("LATENCY ALERT THRESHOLD (µs)", 1.0, 50.0, 20.0)
+    whale_filter = st.slider("BLOCK TRADE FILTER (SIZE ≥)", 1, 200, 50)
 st.markdown("</div>", unsafe_allow_html=True)
 
 # --- LIVE TELEMETRY FRAGMENT ---
@@ -82,11 +133,11 @@ def render_live_feed():
         
         dummy_df = pd.DataFrame({"Trade": [0,1], "Latency (µs)": [0,0], "Price": [0,0]})
         fig_dummy = px.area(dummy_df, x="Trade", y="Latency (µs)", title="[OFFLINE] Latency Feed")
-        fig_dummy.update_layout(plot_bgcolor='#0a0a0a', paper_bgcolor='#0a0a0a', font_color='#555', margin=dict(l=0, r=0, t=40, b=0))
+        fig_dummy.update_layout(plot_bgcolor='#030712', paper_bgcolor='#030712', font_color='#555', margin=dict(l=0, r=0, t=40, b=0))
         col_lat.plotly_chart(fig_dummy, use_container_width=True, key="off_lat")
         
         fig_px_dummy = px.line(dummy_df, x="Trade", y="Price", title="[OFFLINE] Price Action")
-        fig_px_dummy.update_layout(plot_bgcolor='#0a0a0a', paper_bgcolor='#0a0a0a', font_color='#555', margin=dict(l=0, r=0, t=40, b=0))
+        fig_px_dummy.update_layout(plot_bgcolor='#030712', paper_bgcolor='#030712', font_color='#555', margin=dict(l=0, r=0, t=40, b=0))
         col_px.plotly_chart(fig_px_dummy, use_container_width=True, key="off_px")
         
         col_table.info("System Offline. Click 'START ENGINE FEED' to ingest Zero-Copy execution data.")
@@ -183,18 +234,24 @@ def render_live_feed():
         plot_sizes = sizes[-lookback_window:]
         df = pd.DataFrame({"Trade": range(len(plot_lats)), "Latency (µs)": plot_lats, "Price": plot_prices, "Size": plot_sizes})
         
-        # 1. Price Action Chart with Bollinger Bands
-        fig_px = go.Figure()
-        fig_px.add_trace(go.Scatter(x=df['Trade'], y=df['Price'], mode='lines', line=dict(color=hex_color), name='Price'))
+        # 1. Price Action: Advanced OHLC Candlestick Chart
+        df['Bin'] = df.index // 15  # Group every 15 ticks into a candle
+        ohlc = df.groupby('Bin').agg({'Trade': 'last', 'Price': ['first', 'max', 'min', 'last']})
+        ohlc.columns = ['Trade', 'Open', 'High', 'Low', 'Close']
         
-        if show_bbands and len(df) > 20:
-            df['SMA20'] = df['Price'].rolling(20).mean()
-            df['STD20'] = df['Price'].rolling(20).std()
-            fig_px.add_trace(go.Scatter(x=df['Trade'], y=df['SMA20'] + 2*df['STD20'], mode='lines', line=dict(dash='dash', color='rgba(255,255,255,0.3)'), name='Upper BB'))
-            fig_px.add_trace(go.Scatter(x=df['Trade'], y=df['SMA20'] - 2*df['STD20'], mode='lines', fill='tonexty', fillcolor='rgba(255,255,255,0.05)', line=dict(dash='dash', color='rgba(255,255,255,0.3)'), name='Lower BB'))
-            fig_px.add_trace(go.Scatter(x=df['Trade'], y=df['SMA20'], mode='lines', line=dict(dash='dot', color='orange'), name='SMA 20'))
+        fig_px = go.Figure(data=[go.Candlestick(
+            x=ohlc['Trade'], open=ohlc['Open'], high=ohlc['High'], low=ohlc['Low'], close=ohlc['Close'],
+            increasing_line_color='#00ff88', decreasing_line_color='#ff4444', name='OHLC'
+        )])
+        
+        if show_bbands and len(ohlc) > 20:
+            ohlc['SMA20'] = ohlc['Close'].rolling(20).mean()
+            ohlc['STD20'] = ohlc['Close'].rolling(20).std()
+            fig_px.add_trace(go.Scatter(x=ohlc['Trade'], y=ohlc['SMA20'] + 2*ohlc['STD20'], mode='lines', line=dict(dash='dash', color='rgba(255,255,255,0.3)'), name='Upper BB'))
+            fig_px.add_trace(go.Scatter(x=ohlc['Trade'], y=ohlc['SMA20'] - 2*ohlc['STD20'], mode='lines', fill='tonexty', fillcolor='rgba(255,255,255,0.05)', line=dict(dash='dash', color='rgba(255,255,255,0.3)'), name='Lower BB'))
+            fig_px.add_trace(go.Scatter(x=ohlc['Trade'], y=ohlc['SMA20'], mode='lines', line=dict(dash='dot', color='orange'), name='SMA 20'))
             
-        fig_px.update_layout(title="Live Price Action & Volatility", plot_bgcolor='#0a0a0a', paper_bgcolor='#0a0a0a', font_color='#c9d1d9', margin=dict(l=0, r=0, t=40, b=0), showlegend=False)
+        fig_px.update_layout(title="Live Candlestick Action & Volatility", plot_bgcolor='#0a0a0a', paper_bgcolor='#0a0a0a', font_color='#c9d1d9', margin=dict(l=0, r=0, t=40, b=0), showlegend=False, xaxis_rangeslider_visible=False)
         fig_px.update_yaxes(range=[min(plot_prices) - 0.2, max(plot_prices) + 0.2])
         col_px.plotly_chart(fig_px, use_container_width=True, key="px_chart")
         
@@ -212,9 +269,46 @@ def render_live_feed():
         fig_dom.update_yaxes(range=[min(bids_px)-0.1, max(asks_px)+0.1])
         col_dom.plotly_chart(fig_dom, use_container_width=True, key="dom_chart")
         
-        # 3. RSI Oscillator
+        # NEW ROW: 3D Visualization
+        col_3d, col_empty = st.columns([2, 1])
+        
+        # 3. 3D Micro-Structure Trade Visualizer
+        delta = df['Price'].diff()
+        colors = np.where(delta > 0, '#00ff88', np.where(delta < 0, '#ff4444', '#58a6ff'))
+        
+        fig_3d = go.Figure(data=[go.Scatter3d(
+            x=df['Trade'], y=df['Price'], z=df['Size'],
+            mode='markers',
+            marker=dict(
+                size=np.clip(df['Size'] / 10, 2, 15),
+                color=colors,
+                opacity=0.6,
+                line=dict(width=0)
+            )
+        )])
+        fig_3d.update_layout(
+            title="3D Micro-Structure Order Flow",
+            plot_bgcolor='#0a0a0a', paper_bgcolor='#0a0a0a', font_color='#c9d1d9',
+            scene=dict(
+                xaxis_title='Time', yaxis_title='Price', zaxis_title='Volume',
+                xaxis=dict(backgroundcolor='#111', gridcolor='#333'),
+                yaxis=dict(backgroundcolor='#111', gridcolor='#333'),
+                zaxis=dict(backgroundcolor='#111', gridcolor='#333')
+            ),
+            margin=dict(l=0, r=0, b=0, t=40)
+        )
+        col_3d.plotly_chart(fig_3d, use_container_width=True, key="3d_chart")
+        
+        # 4. Order Flow Imbalance (Donut)
+        buy_vol = df.loc[delta > 0, 'Size'].sum()
+        sell_vol = df.loc[delta < 0, 'Size'].sum()
+        fig_flow = go.Figure(data=[go.Pie(labels=['Buy Pressure', 'Sell Pressure'], values=[buy_vol, sell_vol], hole=.6)])
+        fig_flow.update_traces(marker=dict(colors=['rgba(0, 255, 136, 0.7)', 'rgba(255, 68, 68, 0.7)']), textinfo='percent')
+        fig_flow.update_layout(title="Order Flow Imbalance", plot_bgcolor='#0a0a0a', paper_bgcolor='#0a0a0a', font_color='#c9d1d9', margin=dict(l=0, r=0, t=40, b=0), showlegend=False)
+        col_empty.plotly_chart(fig_flow, use_container_width=True, key="flow_chart")
+        
+        # 5. RSI Oscillator
         if show_rsi and len(df) > 14:
-            delta = df['Price'].diff()
             gain = (delta.where(delta > 0, 0)).rolling(window=14).mean()
             loss = (-delta.where(delta < 0, 0)).rolling(window=14).mean()
             rs = gain / loss
@@ -227,7 +321,7 @@ def render_live_feed():
             fig_rsi.update_yaxes(range=[0, 100])
             col_rsi.plotly_chart(fig_rsi, use_container_width=True, key="rsi_chart")
         
-        # 4. MACD Indicator
+        # 6. MACD Indicator
         if len(df) > 26:
             df['EMA12'] = df['Price'].ewm(span=12, adjust=False).mean()
             df['EMA26'] = df['Price'].ewm(span=26, adjust=False).mean()
@@ -239,16 +333,7 @@ def render_live_feed():
             fig_macd.update_layout(title="MACD (12, 26, 9)", plot_bgcolor='#0a0a0a', paper_bgcolor='#0a0a0a', font_color='#c9d1d9', margin=dict(l=0, r=0, t=40, b=0), showlegend=False)
             col_macd.plotly_chart(fig_macd, use_container_width=True, key="macd_chart")
             
-        # 5. Order Flow Imbalance (Donut)
-        delta = df['Price'].diff()
-        buy_vol = df.loc[delta > 0, 'Size'].sum()
-        sell_vol = df.loc[delta < 0, 'Size'].sum()
-        fig_flow = go.Figure(data=[go.Pie(labels=['Buy Pressure', 'Sell Pressure'], values=[buy_vol, sell_vol], hole=.6)])
-        fig_flow.update_traces(marker=dict(colors=['rgba(0, 255, 136, 0.7)', 'rgba(255, 68, 68, 0.7)']), textinfo='percent')
-        fig_flow.update_layout(title="Order Flow Imbalance", plot_bgcolor='#0a0a0a', paper_bgcolor='#0a0a0a', font_color='#c9d1d9', margin=dict(l=0, r=0, t=40, b=0), showlegend=False)
-        col_flow.plotly_chart(fig_flow, use_container_width=True, key="flow_chart")
-        
-        # 6. Latency Chart
+        # 7. Latency Chart
         fig_lat = px.area(df, x="Trade", y="Latency (µs)", title="Execution Latency Telemetry")
         fig_lat.update_traces(line_color=hex_color, fillcolor=f'rgba({int(hex_color[1:3], 16)}, {int(hex_color[3:5], 16)}, {int(hex_color[5:7], 16)}, 0.1)')
         fig_lat.add_hline(y=latency_alert, line_dash="dot", line_color="red")
@@ -256,7 +341,7 @@ def render_live_feed():
         fig_lat.update_yaxes(range=[0, max(50, max_lat * 1.2)])
         col_lat.plotly_chart(fig_lat, use_container_width=True, key="lat_chart")
         
-        # 7. Latency Histogram
+        # 8. Latency Histogram
         fig_hist = px.histogram(df, x="Latency (µs)", nbins=20, title="Latency Distribution Profile")
         fig_hist.update_traces(marker_color=hex_color)
         fig_hist.update_layout(plot_bgcolor='#0a0a0a', paper_bgcolor='#0a0a0a', font_color='#c9d1d9', margin=dict(l=0, r=0, t=40, b=0))
@@ -364,3 +449,5 @@ render_live_feed()
 # [UI] Paper and plot backgrounds synced to #0a0a0a
 
 # [Release] v2.0.0-PRO tagged
+
+# [UI-CSS] Consolas/Courier New applied globally
