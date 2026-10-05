@@ -629,3 +629,5 @@ render_live_feed()
 # [CSS] Inter font imported for login screen
 
 # [CSS] Login button gradient and shadow applied
+
+# [Fix] Prevented CSS leaking into login wall
