@@ -643,3 +643,5 @@ render_live_feed()
 # [Opt] 3D WebGL restored with scoped lookback
 
 # [Fix] RSI and MACD calculation safeguards
+
+# [Release] V3.0 Final Auth & Live Feed Merge
