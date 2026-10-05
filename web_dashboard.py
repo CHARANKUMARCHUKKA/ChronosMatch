@@ -451,3 +451,5 @@ render_live_feed()
 # [Release] v2.0.0-PRO tagged
 
 # [UI-CSS] Consolas/Courier New applied globally
+
+# [UI-CSS] Hidden MainMenu and footer components
