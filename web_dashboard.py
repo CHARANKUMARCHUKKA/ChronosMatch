@@ -637,3 +637,5 @@ render_live_feed()
 # [Fix] Moved H2 injection post-auth wall
 
 # [UI] Stripped out legacy scrolling marquee
+
+# [Data] Rendering last 5 ticks in raw ledger
