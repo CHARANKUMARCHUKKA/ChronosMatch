@@ -463,3 +463,5 @@ render_live_feed()
 # [Dashboard] Injected go.Scatter3d for volume analysis
 
 # [Dashboard] Green/Red array mapping for 3D markers
+
+# [Dashboard] Applied np.clip to normalize 3D marker radii
