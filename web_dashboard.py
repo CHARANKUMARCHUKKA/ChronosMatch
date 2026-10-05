@@ -621,3 +621,5 @@ render_live_feed()
 # [Auth] Split screen layout initialized
 
 # [CSS] Aurora gradient animation added
+
+# [Auth] Email state triggers password field
