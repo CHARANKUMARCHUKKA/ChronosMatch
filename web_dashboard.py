@@ -471,3 +471,5 @@ render_live_feed()
 # [UI-CSS] Set global background to #030712
 
 # [UI-Text] Replaced START FEED with INITIATE IPC LINK
+
+# [Dashboard] Unified Plotly layout backgrounds
