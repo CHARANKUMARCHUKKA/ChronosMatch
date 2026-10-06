@@ -57,3 +57,5 @@ if __name__ == "__main__":
 # [Data] Scaling fractional BTC sizes for uint32
 
 # [IPC] Pushing live market data to ring buffer
+
+# [Feed] Async websockets consumer for binance.com live trades
