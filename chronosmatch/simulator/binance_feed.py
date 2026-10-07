@@ -59,3 +59,5 @@ if __name__ == "__main__":
 # [IPC] Pushing live market data to ring buffer
 
 # [Feed] Async websockets consumer for binance.com live trades
+
+# [Feed] Fixed-point integer precision scaling for sub-satoshi trades
