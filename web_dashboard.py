@@ -653,3 +653,5 @@ render_live_feed()
 # [UI-Perf] Isolated DOM updates to st.fragment boundary
 
 # [Indicators] Technical oscillator calculation routines
+
+# [Auth] Two-step modal authentication gatekeeper
