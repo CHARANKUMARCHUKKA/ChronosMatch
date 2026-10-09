@@ -655,3 +655,5 @@ render_live_feed()
 # [Indicators] Technical oscillator calculation routines
 
 # [Auth] Two-step modal authentication gatekeeper
+
+# [Theme] High-contrast institutional quant UI aesthetic
