@@ -31,3 +31,4 @@ CMD ["streamlit", "run", "web_dashboard.py", "--server.port=8501", "--server.add
 
 # Dockerfile spec v1.0
 # In-place compilation
+# Port 8501 exposed
