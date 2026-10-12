@@ -1,0 +1,23 @@
+# Python Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Cython C-source and compiled extensions
+*.c
+*.cpp
+*.pyd
+*.so
+build/
+dist/
+*.egg-info/
+
+# Development & IDE
+.vscode/
+.idea/
+.pytest_cache/
+*.log
+
+# Shared Memory / Local artifacts
+*.swp
+*.bak
