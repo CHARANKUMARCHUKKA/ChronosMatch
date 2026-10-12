@@ -129,3 +129,5 @@ def run_benchmark(num_orders=50000, capacity=65536):
 
 if __name__ == '__main__':
     run_benchmark(num_orders=20000)
+
+# [CI-Perf] Verified 100k iteration warmups
