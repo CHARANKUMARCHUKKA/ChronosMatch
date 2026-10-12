@@ -1,5 +1,10 @@
 # ChronosMatch ⚡
 
+[![ChronosMatch CI](https://github.com/CHARANKUMARCHUKKA/ChronosMatch/actions/workflows/ci.yml/badge.svg)](https://github.com/CHARANKUMARCHUKKA/ChronosMatch/actions)
+![Python Version](https://img.shields.io/badge/python-3.8%20%7C%203.9%20%7C%203.10%20%7C%203.11-blue)
+![Cython](https://img.shields.io/badge/compiled-Cython%20C--Extension-brightgreen)
+![IPC](https://img.shields.io/badge/IPC-Zero--Copy%20MMap-orange)
+
 **ChronosMatch** is an ultra-low-latency Zero-Copy High-Frequency Trading (HFT) Engine built in Python and Cython.
 
 In High-Frequency Trading, microseconds equal millions of dollars. Python is notoriously dismissed for HFT because its Garbage Collector (GC) causes unpredictable latency spikes, and passing data between multi-processing boundaries usually requires slow serialization (like JSON or Pickle).
@@ -80,6 +85,19 @@ python -m unittest discover -s tests
 streamlit run web_dashboard.py
 ```
 
+### 6. One-Click Windows Launcher
+Double-click `start_chronos.bat` or run:
+```cmd
+start_chronos.bat
+```
+Automatically compiles Cython in-place, spawns the backend engine & Binance WebSocket feed, and launches the Streamlit quant dashboard in your browser.
+
+### 7. Docker Deployment
+Run containerized matching engine and web UI:
+```bash
+docker-compose up --build
+```
+
 ---
 
 ## 🔬 Benchmark Performance
@@ -88,3 +106,5 @@ On modern x86_64 hardware:
 - **Ingest Throughput:** ~600,000+ orders/second
 - **Execution Matching Latency:** ~0.30 µs minimum, sub-50 µs typical P99 under load
 - **Memory Footprint:** Zero allocations on the matching hot path via reusable free-list memory pools
+
+<!-- CI Badge Spec -->
