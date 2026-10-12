@@ -108,3 +108,4 @@ On modern x86_64 hardware:
 - **Memory Footprint:** Zero allocations on the matching hot path via reusable free-list memory pools
 
 <!-- CI Badge Spec -->
+<!-- Shields Metadata -->
