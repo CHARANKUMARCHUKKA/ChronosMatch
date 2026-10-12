@@ -2,6 +2,18 @@ import ctypes
 import mmap
 import os
 
+# Action types
+ACTION_NEW = 0
+ACTION_CANCEL = 1
+
+# Side types
+SIDE_BUY = 0
+SIDE_SELL = 1
+
+# Execution types
+EXEC_FILL = 0
+EXEC_CANCELED = 1
+
 # Ensure memory structures have exact alignment with C/Cython
 class Order(ctypes.Structure):
     _pack_ = 1
@@ -9,8 +21,9 @@ class Order(ctypes.Structure):
         ("order_id", ctypes.c_uint64),
         ("price", ctypes.c_uint64),
         ("size", ctypes.c_uint32),
-        ("side", ctypes.c_uint8),  # 0 for Buy, 1 for Sell
-        ("pad", ctypes.c_uint8 * 3), # Padding to align timestamp to 8 bytes
+        ("side", ctypes.c_uint8),    # 0 for Buy, 1 for Sell
+        ("action", ctypes.c_uint8),  # 0 for New, 1 for Cancel
+        ("pad", ctypes.c_uint8 * 2), # 2 bytes padding to align timestamp to 8 bytes
         ("timestamp", ctypes.c_uint64),
     ] # Total: 32 bytes
 
@@ -21,7 +34,8 @@ class Execution(ctypes.Structure):
         ("order_id", ctypes.c_uint64),
         ("price", ctypes.c_uint64),
         ("size", ctypes.c_uint32),
-        ("pad", ctypes.c_uint32), # Padding to align
+        ("exec_type", ctypes.c_uint8), # 0 for Fill, 1 for Canceled
+        ("pad", ctypes.c_uint8 * 3),   # 3 bytes padding to align ts_in
         ("ts_in", ctypes.c_uint64),
         ("ts_out", ctypes.c_uint64),
     ] # Total: 48 bytes
@@ -37,6 +51,7 @@ class RingBufferHeader(ctypes.Structure):
 def get_ring_buffer(tagname: str, struct_type, capacity: int, create: bool = False):
     """
     Creates or attaches to a named shared memory ring buffer.
+    Uses Windows Named Shared Memory (fileno=-1 with tagname) or POSIX anonymous memory.
     """
     header_size = ctypes.sizeof(RingBufferHeader)
     item_size = ctypes.sizeof(struct_type)
@@ -56,25 +71,3 @@ def get_ring_buffer(tagname: str, struct_type, capacity: int, create: bool = Fal
     data_array = array_type.from_buffer(mm, header_size)
     
     return mm, header, data_array
-
-# optimized mmap init
-
-# memory alignment docs
-
-# [Docs] Note: Tail/Head pointers assume single producer/consumer
-
-# [Core] Exec IDs strictly monotonically increasing
-
-# [Docs] Windows Named Shared memory relies on OS paging
-
-# [Mem] Page boundary alignment verified (64KB)
-
-# [Docs] Requires local admin for global mmap space
-
-# [Core] Verified modulo arithmetic for circular buffer
-
-# [Test] Buffer capacity strictly checked
-
-# [Warning] Readers must not mutate the execution array
-
-# [IPC] Verified memory barriers for zero-copy ring buffer synchronization
