@@ -36,3 +36,4 @@ pause > nul
 :: Chronos Launcher
 :: Build Validation
 :: Process Spawning
+:: Browser Launch
