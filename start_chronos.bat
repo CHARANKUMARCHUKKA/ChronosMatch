@@ -34,3 +34,4 @@ echo ===================================================================
 pause > nul
 
 :: Chronos Launcher
+:: Build Validation
