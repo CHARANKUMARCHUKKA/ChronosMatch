@@ -30,3 +30,4 @@ EXPOSE 8501
 CMD ["streamlit", "run", "web_dashboard.py", "--server.port=8501", "--server.address=0.0.0.0"]
 
 # Dockerfile spec v1.0
+# In-place compilation
