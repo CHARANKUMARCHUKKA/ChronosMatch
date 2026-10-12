@@ -5,7 +5,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import psutil
 import numpy as np
-from chronosmatch.ipc.ring_buffer import get_ring_buffer, Execution
+from chronosmatch.ipc.ring_buffer import get_ring_buffer, Execution, EXEC_FILL, EXEC_CANCELED
 
 st.set_page_config(page_title="ChronosMatch // Terminal", layout="wide", page_icon="⚡", initial_sidebar_state="collapsed")
 
@@ -305,10 +305,12 @@ def render_live_feed():
             new_prices.append(float(exec_record.price) / 100.0)
             new_sizes.append(exec_record.size)
             if len(recent_records) < 25:
+                is_cancel = (getattr(exec_record, 'exec_type', EXEC_FILL) == EXEC_CANCELED)
                 recent_records.append({
                     "EXEC ID": exec_record.exec_id,
                     "PRICE": f"${float(exec_record.price) / 100.0:.2f}",
                     "SIZE": exec_record.size,
+                    "STATUS": "CANCELED" if is_cancel else "FILLED",
                     "LATENCY": f"{lat:.2f} µs"
                 })
         head += 1
