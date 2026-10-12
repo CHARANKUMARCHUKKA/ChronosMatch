@@ -1,11 +1,24 @@
 from libc.stdint cimport uint8_t, uint32_t, uint64_t
 
+# Action types
+# 0: NEW, 1: CANCEL
+cdef enum OrderAction:
+    ACTION_NEW = 0
+    ACTION_CANCEL = 1
+
+# Execution types
+# 0: FILL, 1: CANCELED
+cdef enum ExecType:
+    EXEC_FILL = 0
+    EXEC_CANCELED = 1
+
 cdef packed struct Order:
     uint64_t order_id
     uint64_t price
     uint32_t size
-    uint8_t side
-    uint8_t pad[3]
+    uint8_t side          # 0: BUY, 1: SELL
+    uint8_t action        # 0: NEW, 1: CANCEL
+    uint8_t pad[2]        # 2 bytes alignment padding
     uint64_t timestamp
 
 cdef packed struct Execution:
@@ -13,7 +26,8 @@ cdef packed struct Execution:
     uint64_t order_id
     uint64_t price
     uint32_t size
-    uint32_t pad
+    uint8_t exec_type     # 0: FILL, 1: CANCELED
+    uint8_t pad[3]        # 3 bytes alignment padding
     uint64_t ts_in
     uint64_t ts_out
 
@@ -26,10 +40,11 @@ cdef packed struct RingBufferHeader:
 cdef struct OrderNode:
     Order order
     OrderNode* next
+    OrderNode* prev
 
 cdef struct PriceLevel:
     uint64_t price
     OrderNode* head
     OrderNode* tail
-
-# LOB Price Level node definitions and memory layout (v2.1)
+    uint32_t order_count
+    uint64_t total_volume
