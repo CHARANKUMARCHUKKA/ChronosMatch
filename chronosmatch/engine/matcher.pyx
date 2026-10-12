@@ -184,6 +184,99 @@ cdef class Matcher:
         
         out_hdr.tail = tail + 1
 
+    cdef void cancel_order(self, Order* order, Execution* out_buf, RingBufferHeader* out_hdr) noexcept:
+        cdef OrderNode* curr
+        cdef int level_idx = -1
+        cdef int i
+        
+        # Check Bids if BUY or unspecified
+        if order.side == 0:
+            if order.price > 0:
+                level_idx = self.find_bid_level(order.price)
+                if level_idx != -1:
+                    curr = self.bids[level_idx].head
+                    while curr != NULL:
+                        if curr.order.order_id == order.order_id:
+                            if curr.prev != NULL:
+                                curr.prev.next = curr.next
+                            else:
+                                self.bids[level_idx].head = curr.next
+                            if curr.next != NULL:
+                                curr.next.prev = curr.prev
+                            else:
+                                self.bids[level_idx].tail = curr.prev
+                            
+                            self.add_execution(out_buf, out_hdr, curr.order.order_id, curr.order.price, curr.order.size, EXEC_CANCELED, curr.order.timestamp, get_time_ns())
+                            self.free_node(curr)
+                            if self.bids[level_idx].head == NULL:
+                                self.delete_bid_level(level_idx)
+                            return
+                        curr = curr.next
+            else:
+                # Scan bids across all levels
+                for i in range(<int>self.num_bids):
+                    curr = self.bids[i].head
+                    while curr != NULL:
+                        if curr.order.order_id == order.order_id:
+                            if curr.prev != NULL:
+                                curr.prev.next = curr.next
+                            else:
+                                self.bids[i].head = curr.next
+                            if curr.next != NULL:
+                                curr.next.prev = curr.prev
+                            else:
+                                self.bids[i].tail = curr.prev
+                            
+                            self.add_execution(out_buf, out_hdr, curr.order.order_id, curr.order.price, curr.order.size, EXEC_CANCELED, curr.order.timestamp, get_time_ns())
+                            self.free_node(curr)
+                            if self.bids[i].head == NULL:
+                                self.delete_bid_level(i)
+                            return
+                        curr = curr.next
+        else:
+            # Check Asks
+            if order.price > 0:
+                level_idx = self.find_ask_level(order.price)
+                if level_idx != -1:
+                    curr = self.asks[level_idx].head
+                    while curr != NULL:
+                        if curr.order.order_id == order.order_id:
+                            if curr.prev != NULL:
+                                curr.prev.next = curr.next
+                            else:
+                                self.asks[level_idx].head = curr.next
+                            if curr.next != NULL:
+                                curr.next.prev = curr.prev
+                            else:
+                                self.asks[level_idx].tail = curr.prev
+                            
+                            self.add_execution(out_buf, out_hdr, curr.order.order_id, curr.order.price, curr.order.size, EXEC_CANCELED, curr.order.timestamp, get_time_ns())
+                            self.free_node(curr)
+                            if self.asks[level_idx].head == NULL:
+                                self.delete_ask_level(level_idx)
+                            return
+                        curr = curr.next
+            else:
+                for i in range(<int>self.num_asks):
+                    curr = self.asks[i].head
+                    while curr != NULL:
+                        if curr.order.order_id == order.order_id:
+                            if curr.prev != NULL:
+                                curr.prev.next = curr.next
+                            else:
+                                self.asks[i].head = curr.next
+                            if curr.next != NULL:
+                                curr.next.prev = curr.prev
+                            else:
+                                self.asks[i].tail = curr.prev
+                            
+                            self.add_execution(out_buf, out_hdr, curr.order.order_id, curr.order.price, curr.order.size, EXEC_CANCELED, curr.order.timestamp, get_time_ns())
+                            self.free_node(curr)
+                            if self.asks[i].head == NULL:
+                                self.delete_ask_level(i)
+                            return
+                        curr = curr.next
+
     cdef void process_order(self, Order* order, Execution* out_buf, RingBufferHeader* out_hdr) noexcept:
         cdef uint32_t match_size = 0
         cdef uint64_t match_price = 0
@@ -191,6 +284,11 @@ cdef class Matcher:
         cdef OrderNode* dead_node
         cdef int level_idx
         
+        # Check for order cancellation request
+        if order.action == ACTION_CANCEL:
+            self.cancel_order(order, out_buf, out_hdr)
+            return
+
         if order.side == 0: # BUY
             # Match against Asks (lowest ask is always at self.asks[0])
             while order.size > 0 and self.num_asks > 0:
