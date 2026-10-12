@@ -137,5 +137,45 @@ class TestMatcher(unittest.TestCase):
         self.assertEqual(self.hdr_out.tail, 0)
         self.assertEqual(self.matcher.get_num_bids(), 0)
 
+    def test_free_list_pool_recycling(self):
+        """Verify free-list node recycling allows processing more orders than pool capacity without leaks."""
+        # Create a matcher with a tiny pool capacity of only 20 nodes
+        tiny_matcher = Matcher(max_orders=20, max_levels=10)
+        
+        # Cycle 200 orders through the 20-node pool (place then match)
+        for i in range(100):
+            o_sell = Order()
+            o_sell.order_id = i * 2 + 1
+            o_sell.price = 50000
+            o_sell.size = 10
+            o_sell.side = SIDE_SELL
+            o_sell.action = ACTION_NEW
+            o_sell.timestamp = time.perf_counter_ns()
+            tiny_matcher.process_order_single(
+                ctypes.addressof(o_sell),
+                ctypes.addressof(self.data_out),
+                ctypes.addressof(self.hdr_out)
+            )
+
+            o_buy = Order()
+            o_buy.order_id = i * 2 + 2
+            o_buy.price = 50000
+            o_buy.size = 10
+            o_buy.side = SIDE_BUY
+            o_buy.action = ACTION_NEW
+            o_buy.timestamp = time.perf_counter_ns()
+            tiny_matcher.process_order_single(
+                ctypes.addressof(o_buy),
+                ctypes.addressof(self.data_out),
+                ctypes.addressof(self.hdr_out)
+            )
+
+        # Book should be empty and free-list populated
+        self.assertEqual(tiny_matcher.get_num_bids(), 0)
+        self.assertEqual(tiny_matcher.get_num_asks(), 0)
+        # Pool index reached at most 1 or 2 nodes because of continuous recycling!
+        self.assertLessEqual(tiny_matcher.get_pool_index(), 5)
+        self.assertTrue(tiny_matcher.has_free_nodes())
+
 if __name__ == '__main__':
     unittest.main()
