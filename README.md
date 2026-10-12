@@ -111,3 +111,4 @@ On modern x86_64 hardware:
 <!-- Shields Metadata -->
 <!-- Launcher Guide -->
 <!-- Docker Compose Guide -->
+<!-- Throughput Metrics -->
