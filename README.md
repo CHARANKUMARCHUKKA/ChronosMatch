@@ -110,3 +110,4 @@ On modern x86_64 hardware:
 <!-- CI Badge Spec -->
 <!-- Shields Metadata -->
 <!-- Launcher Guide -->
+<!-- Docker Compose Guide -->
