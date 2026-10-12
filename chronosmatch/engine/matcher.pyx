@@ -19,11 +19,13 @@ cdef class Matcher:
     cdef uint32_t pool_index
     cdef OrderNode* free_list
     
-    # Simple arrays for price levels
+    # Sorted arrays for price levels:
+    # Bids sorted descending (highest price at index 0)
     cdef PriceLevel* bids
     cdef uint32_t num_bids
     cdef uint32_t max_bids
     
+    # Asks sorted ascending (lowest price at index 0)
     cdef PriceLevel* asks
     cdef uint32_t num_asks
     cdef uint32_t max_asks
@@ -54,16 +56,14 @@ cdef class Matcher:
 
     cdef OrderNode* alloc_node(self, Order* order) noexcept:
         cdef OrderNode* node = NULL
-        # 1. Pop from reusable free-list if available (O(1) recycling)
         if self.free_list != NULL:
             node = self.free_list
             self.free_list = node.next
-        # 2. Otherwise allocate from pre-warmed pool
         elif self.pool_index < self.pool_capacity:
             node = &self.order_pool[self.pool_index]
             self.pool_index += 1
         else:
-            return NULL # Pool exhausted
+            return NULL
 
         node.order = order[0]
         node.next = NULL
@@ -75,6 +75,98 @@ cdef class Matcher:
             node.next = self.free_list
             node.prev = NULL
             self.free_list = node
+
+    cdef int find_ask_level(self, uint64_t price) noexcept:
+        cdef int low = 0
+        cdef int high = <int>self.num_asks - 1
+        cdef int mid
+        while low <= high:
+            mid = (low + high) >> 1
+            if self.asks[mid].price == price:
+                return mid
+            elif self.asks[mid].price < price:
+                low = mid + 1
+            else:
+                high = mid - 1
+        return -1
+
+    cdef int insert_ask_level(self, uint64_t price) noexcept:
+        if self.num_asks >= self.max_asks:
+            return -1
+        cdef int low = 0
+        cdef int high = <int>self.num_asks - 1
+        cdef int mid
+        while low <= high:
+            mid = (low + high) >> 1
+            if self.asks[mid].price == price:
+                return mid
+            elif self.asks[mid].price < price:
+                low = mid + 1
+            else:
+                high = mid - 1
+        cdef int ins = low
+        cdef int i
+        for i in range(<int>self.num_asks, ins, -1):
+            self.asks[i] = self.asks[i - 1]
+        self.num_asks += 1
+        self.asks[ins].price = price
+        self.asks[ins].head = NULL
+        self.asks[ins].tail = NULL
+        self.asks[ins].order_count = 0
+        self.asks[ins].total_volume = 0
+        return ins
+
+    cdef void delete_ask_level(self, int idx) noexcept:
+        cdef int i
+        self.num_asks -= 1
+        for i in range(idx, <int>self.num_asks):
+            self.asks[i] = self.asks[i + 1]
+
+    cdef int find_bid_level(self, uint64_t price) noexcept:
+        cdef int low = 0
+        cdef int high = <int>self.num_bids - 1
+        cdef int mid
+        while low <= high:
+            mid = (low + high) >> 1
+            if self.bids[mid].price == price:
+                return mid
+            elif self.bids[mid].price > price:
+                low = mid + 1
+            else:
+                high = mid - 1
+        return -1
+
+    cdef int insert_bid_level(self, uint64_t price) noexcept:
+        if self.num_bids >= self.max_bids:
+            return -1
+        cdef int low = 0
+        cdef int high = <int>self.num_bids - 1
+        cdef int mid
+        while low <= high:
+            mid = (low + high) >> 1
+            if self.bids[mid].price == price:
+                return mid
+            elif self.bids[mid].price > price:
+                low = mid + 1
+            else:
+                high = mid - 1
+        cdef int ins = low
+        cdef int i
+        for i in range(<int>self.num_bids, ins, -1):
+            self.bids[i] = self.bids[i - 1]
+        self.num_bids += 1
+        self.bids[ins].price = price
+        self.bids[ins].head = NULL
+        self.bids[ins].tail = NULL
+        self.bids[ins].order_count = 0
+        self.bids[ins].total_volume = 0
+        return ins
+
+    cdef void delete_bid_level(self, int idx) noexcept:
+        cdef int i
+        self.num_bids -= 1
+        for i in range(idx, <int>self.num_bids):
+            self.bids[i] = self.bids[i + 1]
 
     cdef void add_execution(self, Execution* out_buf, RingBufferHeader* out_hdr, uint64_t order_id, uint64_t price, uint32_t size, uint8_t exec_type, uint64_t ts_in, uint64_t ts_out) noexcept:
         cdef uint64_t tail = out_hdr.tail
@@ -98,84 +190,63 @@ cdef class Matcher:
         cdef OrderNode* curr
         cdef OrderNode* dead_node
         cdef int level_idx
-        cdef int i
         
         if order.side == 0: # BUY
-            # Match against Asks (lowest to highest)
+            # Match against Asks (lowest ask is always at self.asks[0])
             while order.size > 0 and self.num_asks > 0:
-                # Find min ask
-                level_idx = 0
-                for i in range(1, self.num_asks):
-                    if self.asks[i].price < self.asks[level_idx].price:
-                        level_idx = i
+                if self.asks[0].price > order.price:
+                    break # Best ask is above limit price
                 
-                if self.asks[level_idx].price > order.price:
-                    break # Best ask is too expensive
-                
-                # Match against orders at this price level
-                curr = self.asks[level_idx].head
+                curr = self.asks[0].head
                 while curr != NULL and order.size > 0:
                     match_size = order.size if order.size < curr.order.size else curr.order.size
-                    match_price = self.asks[level_idx].price
+                    match_price = self.asks[0].price
                     
                     order.size -= match_size
                     curr.order.size -= match_size
                     
-                    # Generate executions for both sides (FILL)
                     self.add_execution(out_buf, out_hdr, curr.order.order_id, match_price, match_size, EXEC_FILL, curr.order.timestamp, get_time_ns())
                     self.add_execution(out_buf, out_hdr, order.order_id, match_price, match_size, EXEC_FILL, order.timestamp, get_time_ns())
                     
                     if curr.order.size == 0:
                         dead_node = curr
-                        self.asks[level_idx].head = curr.next
+                        self.asks[0].head = curr.next
+                        if self.asks[0].head != NULL:
+                            self.asks[0].head.prev = NULL
+                        else:
+                            self.asks[0].tail = NULL
                         curr = curr.next
-                        self.free_node(dead_node) # Recycle node memory
+                        self.free_node(dead_node)
                     else:
                         break
                         
-                if self.asks[level_idx].head == NULL:
-                    self.num_asks -= 1
-                    self.asks[level_idx] = self.asks[self.num_asks]
+                if self.asks[0].head == NULL:
+                    self.delete_ask_level(0)
                     
-            # If still size left, add to bids
+            # Resting order: add remaining size to bids
             if order.size > 0:
-                level_idx = -1
-                for i in range(self.num_bids):
-                    if self.bids[i].price == order.price:
-                        level_idx = i
-                        break
-                if level_idx == -1:
-                    level_idx = self.num_bids
-                    self.num_bids += 1
-                    self.bids[level_idx].price = order.price
-                    self.bids[level_idx].head = NULL
-                    self.bids[level_idx].tail = NULL
-                
-                curr = self.alloc_node(order)
-                if curr != NULL:
-                    if self.bids[level_idx].head == NULL:
-                        self.bids[level_idx].head = curr
-                        self.bids[level_idx].tail = curr
-                    else:
-                        self.bids[level_idx].tail.next = curr
-                        self.bids[level_idx].tail = curr
+                level_idx = self.insert_bid_level(order.price)
+                if level_idx != -1:
+                    curr = self.alloc_node(order)
+                    if curr != NULL:
+                        if self.bids[level_idx].head == NULL:
+                            self.bids[level_idx].head = curr
+                            self.bids[level_idx].tail = curr
+                        else:
+                            curr.prev = self.bids[level_idx].tail
+                            self.bids[level_idx].tail.next = curr
+                            self.bids[level_idx].tail = curr
 
         else: # SELL
-            # Match against Bids (highest to lowest)
+            # Match against Bids (highest bid is always at self.bids[0])
             while order.size > 0 and self.num_bids > 0:
-                # Find max bid
-                level_idx = 0
-                for i in range(1, self.num_bids):
-                    if self.bids[i].price > self.bids[level_idx].price:
-                        level_idx = i
-                        
-                if self.bids[level_idx].price < order.price:
-                    break # Best bid is too cheap
+                if self.bids[0].price < order.price:
+                    break # Best bid is below limit price
                     
-                curr = self.bids[level_idx].head
+                curr = self.bids[0].head
                 while curr != NULL and order.size > 0:
                     match_size = order.size if order.size < curr.order.size else curr.order.size
-                    match_price = self.bids[level_idx].price
+                    match_price = self.bids[0].price
                     
                     order.size -= match_size
                     curr.order.size -= match_size
@@ -185,37 +256,31 @@ cdef class Matcher:
                     
                     if curr.order.size == 0:
                         dead_node = curr
-                        self.bids[level_idx].head = curr.next
+                        self.bids[0].head = curr.next
+                        if self.bids[0].head != NULL:
+                            self.bids[0].head.prev = NULL
+                        else:
+                            self.bids[0].tail = NULL
                         curr = curr.next
-                        self.free_node(dead_node) # Recycle node memory
+                        self.free_node(dead_node)
                     else:
                         break
                 
-                if self.bids[level_idx].head == NULL:
-                    self.num_bids -= 1
-                    self.bids[level_idx] = self.bids[self.num_bids]
+                if self.bids[0].head == NULL:
+                    self.delete_bid_level(0)
                     
             if order.size > 0:
-                level_idx = -1
-                for i in range(self.num_asks):
-                    if self.asks[i].price == order.price:
-                        level_idx = i
-                        break
-                if level_idx == -1:
-                    level_idx = self.num_asks
-                    self.num_asks += 1
-                    self.asks[level_idx].price = order.price
-                    self.asks[level_idx].head = NULL
-                    self.asks[level_idx].tail = NULL
-                    
-                curr = self.alloc_node(order)
-                if curr != NULL:
-                    if self.asks[level_idx].head == NULL:
-                        self.asks[level_idx].head = curr
-                        self.asks[level_idx].tail = curr
-                    else:
-                        self.asks[level_idx].tail.next = curr
-                        self.asks[level_idx].tail = curr
+                level_idx = self.insert_ask_level(order.price)
+                if level_idx != -1:
+                    curr = self.alloc_node(order)
+                    if curr != NULL:
+                        if self.asks[level_idx].head == NULL:
+                            self.asks[level_idx].head = curr
+                            self.asks[level_idx].tail = curr
+                        else:
+                            curr.prev = self.asks[level_idx].tail
+                            self.asks[level_idx].tail.next = curr
+                            self.asks[level_idx].tail = curr
 
     def run(self, size_t in_buf_addr, size_t in_hdr_addr, size_t out_buf_addr, size_t out_hdr_addr):
         cdef Order* in_buf = <Order*>in_buf_addr
@@ -232,7 +297,6 @@ cdef class Matcher:
         while True:
             if in_hdr.tail > head:
                 order = &in_buf[head % cap]
-                # Special exit condition: order_id == 0 means STOP
                 if order.order_id == 0:
                     print("Received STOP signal.")
                     break
