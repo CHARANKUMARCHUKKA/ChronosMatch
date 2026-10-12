@@ -21,3 +21,4 @@ Use these technical summaries for your **Review 2 / FINAL Stage** write-up input
 
 <!-- Week 3 Progress Note -->
 <!-- WebSocket Telemetry Note -->
+<!-- Week 4 Progress Note -->
