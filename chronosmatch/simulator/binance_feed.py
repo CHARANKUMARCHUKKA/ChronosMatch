@@ -63,6 +63,7 @@ async def run_binance_feed(tagname="ChronosMatchInbound", capacity=65536):
                 print(f"[BINANCE FEED] Connection lost: {e}. Reconnecting in 2 seconds...")
                 await asyncio.sleep(2)
     finally:
+        order = None
         del header, data_array
         mm.close()
 

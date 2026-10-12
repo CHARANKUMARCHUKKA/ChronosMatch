@@ -98,6 +98,7 @@ async def simulate_firehose(tagname="ChronosMatchInbound", capacity=65536, durat
 
         print(f"[MARKET SIMULATOR] Finished. Generated {order_id - 1:,} total orders.")
     finally:
+        order = None
         del header, data_array
         mm.close()
 
