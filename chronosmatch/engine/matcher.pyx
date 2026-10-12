@@ -54,6 +54,28 @@ cdef class Matcher:
         if self.asks != NULL:
             free(self.asks)
 
+    def get_num_bids(self):
+        return self.num_bids
+        
+    def get_num_asks(self):
+        return self.num_asks
+        
+    def get_best_bid(self):
+        if self.num_bids > 0:
+            return self.bids[0].price
+        return 0
+        
+    def get_best_ask(self):
+        if self.num_asks > 0:
+            return self.asks[0].price
+        return 0
+        
+    def get_pool_index(self):
+        return self.pool_index
+        
+    def has_free_nodes(self):
+        return self.free_list != NULL
+
     cdef OrderNode* alloc_node(self, Order* order) noexcept:
         cdef OrderNode* node = NULL
         if self.free_list != NULL:
@@ -213,7 +235,6 @@ cdef class Matcher:
                             return
                         curr = curr.next
             else:
-                # Scan bids across all levels
                 for i in range(<int>self.num_bids):
                     curr = self.bids[i].head
                     while curr != NULL:
@@ -284,16 +305,14 @@ cdef class Matcher:
         cdef OrderNode* dead_node
         cdef int level_idx
         
-        # Check for order cancellation request
         if order.action == ACTION_CANCEL:
             self.cancel_order(order, out_buf, out_hdr)
             return
 
         if order.side == 0: # BUY
-            # Match against Asks (lowest ask is always at self.asks[0])
             while order.size > 0 and self.num_asks > 0:
                 if self.asks[0].price > order.price:
-                    break # Best ask is above limit price
+                    break
                 
                 curr = self.asks[0].head
                 while curr != NULL and order.size > 0:
@@ -321,7 +340,6 @@ cdef class Matcher:
                 if self.asks[0].head == NULL:
                     self.delete_ask_level(0)
                     
-            # Resting order: add remaining size to bids
             if order.size > 0:
                 level_idx = self.insert_bid_level(order.price)
                 if level_idx != -1:
@@ -336,10 +354,9 @@ cdef class Matcher:
                             self.bids[level_idx].tail = curr
 
         else: # SELL
-            # Match against Bids (highest bid is always at self.bids[0])
             while order.size > 0 and self.num_bids > 0:
                 if self.bids[0].price < order.price:
-                    break # Best bid is below limit price
+                    break
                     
                 curr = self.bids[0].head
                 while curr != NULL and order.size > 0:
@@ -380,6 +397,12 @@ cdef class Matcher:
                             self.asks[level_idx].tail.next = curr
                             self.asks[level_idx].tail = curr
 
+    def process_order_single(self, size_t order_addr, size_t out_buf_addr, size_t out_hdr_addr):
+        cdef Order* order = <Order*>order_addr
+        cdef Execution* out_buf = <Execution*>out_buf_addr
+        cdef RingBufferHeader* out_hdr = <RingBufferHeader*>out_hdr_addr
+        self.process_order(order, out_buf, out_hdr)
+
     def run(self, size_t in_buf_addr, size_t in_hdr_addr, size_t out_buf_addr, size_t out_hdr_addr):
         cdef Order* in_buf = <Order*>in_buf_addr
         cdef RingBufferHeader* in_hdr = <RingBufferHeader*>in_hdr_addr
@@ -389,6 +412,7 @@ cdef class Matcher:
         cdef uint64_t head = in_hdr.head
         cdef uint64_t cap = in_hdr.capacity
         cdef Order* order
+        cdef int spin_count = 0
         
         print("Cython Matcher engine started. Polling ring buffer...")
         
@@ -401,5 +425,9 @@ cdef class Matcher:
                 self.process_order(order, out_buf, out_hdr)
                 head += 1
                 in_hdr.head = head
+                spin_count = 0
             else:
-                pass
+                spin_count += 1
+                if spin_count > 5000:
+                    time.sleep(0.0001)
+                    spin_count = 0
