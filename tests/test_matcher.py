@@ -93,5 +93,49 @@ class TestMatcher(unittest.TestCase):
         self.assertEqual(self.matcher.get_num_asks(), 1)
         self.assertEqual(self.matcher.get_best_ask(), 10000)
 
+    def test_partial_fill_leaves_remaining_quantity(self):
+        """Verify partial fill decrements resting order size and retains it in book."""
+        # 1. Maker BUY 100 units at 5000
+        self._send_order(order_id=301, price=5000, size=100, side=SIDE_BUY)
+
+        # 2. Taker SELL 35 units at 5000
+        self._send_order(order_id=302, price=5000, size=35, side=SIDE_SELL)
+
+        self.assertEqual(self.hdr_out.tail, 2)
+        exec_maker = self.data_out[0]
+        exec_taker = self.data_out[1]
+        self.assertEqual(exec_maker.size, 35)
+        self.assertEqual(exec_taker.size, 35)
+
+        # 3. Remaining 65 units can be matched by another order
+        self._send_order(order_id=303, price=5000, size=65, side=SIDE_SELL)
+        self.assertEqual(self.hdr_out.tail, 4)
+        self.assertEqual(self.matcher.get_num_bids(), 0)
+
+    def test_order_cancellation(self):
+        """Verify cancelling resting order removes it from book and emits EXEC_CANCELED."""
+        # Insert resting order
+        self._send_order(order_id=401, price=7500, size=50, side=SIDE_BUY)
+        self.assertEqual(self.matcher.get_num_bids(), 1)
+
+        # Send cancellation
+        self._send_order(order_id=401, price=7500, size=50, side=SIDE_BUY, action=ACTION_CANCEL)
+
+        # Book is now empty
+        self.assertEqual(self.matcher.get_num_bids(), 0)
+        self.assertEqual(self.hdr_out.tail, 1)
+
+        cancel_exec = self.data_out[0]
+        self.assertEqual(cancel_exec.order_id, 401)
+        self.assertEqual(cancel_exec.price, 7500)
+        self.assertEqual(cancel_exec.size, 50)
+        self.assertEqual(cancel_exec.exec_type, EXEC_CANCELED)
+
+    def test_cancel_nonexistent_order_no_op(self):
+        """Verify cancelling a non-existent order gracefully does nothing."""
+        self._send_order(order_id=999999, price=7500, size=10, side=SIDE_BUY, action=ACTION_CANCEL)
+        self.assertEqual(self.hdr_out.tail, 0)
+        self.assertEqual(self.matcher.get_num_bids(), 0)
+
 if __name__ == '__main__':
     unittest.main()
