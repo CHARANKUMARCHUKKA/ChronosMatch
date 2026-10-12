@@ -112,3 +112,4 @@ On modern x86_64 hardware:
 <!-- Launcher Guide -->
 <!-- Docker Compose Guide -->
 <!-- Throughput Metrics -->
+<!-- ChronosMatch v3.5 Production Locked -->
